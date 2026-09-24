@@ -1,0 +1,40 @@
+{
+  "name": "intentfield",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "7.9.5",
+    "convex": "1.46.0",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@clerk/testing": "2.2.37",
+    "@edge-runtime/vm": "5.0.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "convex-test": "0.0.59",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.6",
+    "prettier": "3.9.9",
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
+  },
+  "type": "module",
+  "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "1.2.10"
+  }
+}

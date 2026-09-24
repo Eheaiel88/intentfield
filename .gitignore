@@ -1,0 +1,26 @@
+# Local credentials and runtime configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and generated build state
+node_modules/
+.next/
+out/
+dist/
+.vercel/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+*.log
+.DS_Store
+
+# Private or local-only working material
+private/
+research/
+transcripts/
+member-exports/
+test-results/
+playwright-report/
