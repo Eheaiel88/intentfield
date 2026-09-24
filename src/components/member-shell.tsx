@@ -21,37 +21,54 @@ export function MemberShell({
   owner?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const links = (items: string[][]) =>
+    items.map(([id, icon, name]) => (
+      <Link
+        key={id}
+        href={`${base}/${id}`}
+        onClick={() => dialog.current?.close()}
+        className={`nav-item ${active === id ? "active" : ""}`}
+        aria-current={active === id ? "page" : undefined}
+      >
+        <span aria-hidden="true">{icon}</span>
+        {name}
+        {active === id && <i />}
+      </Link>
+    ));
   const nav = (
-    <nav aria-label="Member navigation">
-      {[
-        ["today", "◒", "Today"],
-        ["course", "▤", "The course"],
-        ...(!review
-          ? [
-              ["tools", "◇", "Inner work tools"],
-              ["profile", "◎", "My self-image"],
-              ["ledger", "≡", "Receiving Ledger"],
-              ["book", "▥", "Book & workbook"],
-              ["audio", "◖", "Morning & Evening"],
-              ["review", "↻", "My weekly review"],
-              ["purchases", "↗", "My products"],
-              ["settings", "⚙", "Notes & settings"],
-              ...(owner ? [["admin", "✎", "Content studio"]] : []),
-            ]
-          : []),
-      ].map(([id, icon, name]) => (
-        <Link
-          key={id}
-          href={`${base}/${id}`}
-          onClick={() => dialog.current?.close()}
-          className={`nav-item ${active === id ? "active" : ""}`}
-          aria-current={active === id ? "page" : undefined}
-        >
-          <span aria-hidden="true">{icon}</span>
-          {name}
-          {active === id && <i />}
-        </Link>
-      ))}
+    <nav aria-label="Member navigation" className="member-navigation">
+      <div className="practice-navigation">
+        {links([
+          ["today", "◒", "Today"],
+          ["course", "▤", "The course"],
+          ...(!review
+            ? [
+                ["tools", "◇", "Inner work tools"],
+                ["profile", "◎", "My self-image"],
+                ["ledger", "≡", "Receiving Ledger"],
+                ["book", "▥", "Book & workbook"],
+                ["audio", "◖", "Morning & Evening"],
+              ]
+            : []),
+        ])}
+      </div>
+      {!review && (
+        <div className="sidebar-bottom">
+          {links([
+            ["review", "↻", "My weekly review"],
+            ["settings", "⚙", "Notes & settings"],
+          ])}
+          <div className="products-navigation">
+            {links([["purchases", "↗", "My products"]])}
+          </div>
+          {owner && (
+            <div className="owner-navigation">
+              <p className="nav-label">OWNER AREA</p>
+              {links([["admin", "✎", "Content studio"]])}
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
   return (

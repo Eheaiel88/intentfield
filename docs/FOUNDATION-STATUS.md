@@ -31,6 +31,8 @@ The header offers Light and Dark appearance, saved in the current browser and sy
 
 Captions and status text now use a 14px minimum, with descriptions, controls and form text at least 16px on desktop and mobile. The Today dashboard uses the same six numbered stage cards and descriptions as the landing page. Container queries choose six, three, two or one column based on available space. Small decorative lettering on the book artwork remains unchanged.
 
+My Products now uses the accepted launch-preview panels: book cover, large 30 and orange sun/moon, with equal-height desktop cards, aligned actions, the public sample download and responsive stacking. Private product links still require the relevant entitlement; PDF and recording messages reflect the published library. Warm orange appears in page labels, selected serif headings, day indicators, reflection anchors, utility icons and focus outlines. The original sidebar sequence and separation are restored on desktop and mobile: Today, course, tools, self-image, ledger, book, audio; then weekly review, settings and My Products. Content Studio remains in a separate owner area.
+
 ## Content and storage
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.

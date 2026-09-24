@@ -124,7 +124,7 @@ hr {
   background: var(--electric);
 }
 :focus-visible {
-  outline: 2px solid var(--electric);
+  outline: 2px solid var(--amber);
   outline-offset: 5px;
 }
 main:focus {
@@ -1083,6 +1083,87 @@ main:focus {
   font-size: 42px;
   color: var(--rule);
 }
+/* Product artwork and panels follow the accepted launch-preview purchases screen. */
+.product-library {
+  margin-bottom: 28px;
+}
+.product-library .access-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+}
+.product-card {
+  min-width: 0;
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 6;
+  row-gap: 0;
+  align-items: start;
+}
+.product-card > .eyebrow {
+  margin-bottom: 24px;
+}
+.product-card .access-art {
+  height: 240px;
+  margin-bottom: 30px;
+}
+.product-card .book-object.mini {
+  width: 150px;
+}
+.product-card .mini .book-title {
+  font-size: 17px;
+}
+.product-card h2 {
+  font-size: clamp(28px, 2.1vw, 34px);
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+.product-card .product-description {
+  font-size: var(--text-body);
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+.product-card .audio-access svg {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+.product-card .product-actions {
+  width: 100%;
+  padding-top: 12px;
+}
+.product-actions .button {
+  width: 100%;
+  min-height: 60px;
+  gap: 12px;
+}
+.product-actions .button > span {
+  flex-shrink: 0;
+}
+.product-sample {
+  margin-top: 4px;
+}
+.product-unavailable {
+  padding: 16px;
+  background: var(--graphite);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+  font-size: var(--text-body);
+}
+.product-unavailable span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+.product-card .product-note {
+  font-size: var(--text-caption);
+  line-height: 1.6;
+  margin: 24px 0 0;
+}
+.warm-emphasis {
+  color: var(--amber);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+}
 .app-layout {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -1100,6 +1181,29 @@ main:focus {
 }
 .sidebar > .brand {
   margin: 0 12px 42px;
+}
+.member-navigation {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.products-navigation {
+  border-top: 1px solid var(--rule);
+  margin-top: 16px;
+  padding-top: 16px;
+}
+.owner-navigation {
+  border-top: 1px solid var(--rule);
+  margin-top: 22px;
+  padding-top: 20px;
+}
+.owner-navigation .nav-label {
+  margin-bottom: 8px;
+  color: var(--amber);
+}
+.sidebar-bottom > .nav-item > span,
+.products-navigation .nav-item > span {
+  color: var(--amber);
 }
 .sidebar .brand img {
   width: 183px;
@@ -1182,7 +1286,7 @@ main:focus {
 }
 .app-topbar i {
   margin: 0 12px;
-  color: var(--rule);
+  color: var(--amber);
   font-style: normal;
 }
 .app-topbar b {
@@ -1216,6 +1320,7 @@ main:focus {
 }
 .page-heading .eyebrow {
   font-size: var(--text-caption);
+  color: var(--amber);
 }
 .today-grid {
   display: grid;
@@ -1244,6 +1349,10 @@ main:focus {
 .card-top .micro {
   font-size: var(--text-caption);
 }
+.card-top .pill {
+  color: var(--amber);
+  border-color: var(--amber);
+}
 .today-main .eyebrow {
   font-size: var(--text-caption);
   margin-bottom: 18px;
@@ -1269,7 +1378,7 @@ main:focus {
 .today-takeaway span {
   font-size: var(--text-caption);
   letter-spacing: 0.08em;
-  color: var(--electric);
+  color: var(--amber);
 }
 .today-takeaway p {
   font-size: var(--text-body);
@@ -1289,7 +1398,7 @@ main:focus {
 }
 .direction-mark {
   font-size: 60px;
-  color: var(--electric);
+  color: var(--amber);
   display: block;
   line-height: 1.2;
   margin-bottom: 16px;
@@ -1475,7 +1584,7 @@ main:focus {
 .reading-label {
   font-size: var(--text-caption);
   letter-spacing: 0.1em;
-  color: var(--muted);
+  color: var(--amber);
   margin-bottom: 28px;
 }
 .teaching {
@@ -1497,18 +1606,20 @@ main:focus {
 }
 .teaching-anchor {
   padding: 25px;
-  border-left: 3px solid var(--electric);
-  background: var(--surface-tint, #20291b);
+  border-left: 3px solid var(--amber);
+  background: var(--warm-surface, #29241d);
   margin: 32px 0;
 }
 .teaching-anchor .eyebrow {
   font-size: var(--text-caption);
+  color: var(--amber);
 }
 .teaching-anchor blockquote {
   font-size: 22px;
   line-height: 1.3;
   letter-spacing: -0.025em;
   margin: 14px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
 }
 .teaching h2 {
   font-size: 29px;
@@ -1526,7 +1637,7 @@ main:focus {
   line-height: 1.7;
 }
 .practice-steps li::marker {
-  color: var(--electric);
+  color: var(--amber);
 }
 .source-note {
   font-size: var(--text-caption);
@@ -1611,9 +1722,9 @@ input::placeholder {
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: var(--electric);
-  outline: 1px solid var(--electric);
-  outline-offset: 1px;
+  border-color: var(--amber);
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
 }
 input[type="checkbox"] {
   width: 17px;

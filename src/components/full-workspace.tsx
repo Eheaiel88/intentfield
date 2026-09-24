@@ -8,6 +8,7 @@ import { ButtonLink, Cycle, MethodStages } from "./brand";
 import { SavedForm, type Field } from "./saved-form";
 import { ContentStudio } from "./content-studio";
 import { LessonGuide } from "./lesson-guide";
+import { ProductLibrary } from "./product-library";
 import type { ContentItem, Note } from "@/lib/content";
 import { profileDomains } from "@/lib/content";
 import outline from "@/lib/course-outline.json";
@@ -31,7 +32,7 @@ export function Heading({
   description,
 }: {
   eyebrow: string;
-  title: string;
+  title: React.ReactNode;
   description?: string;
 }) {
   return (
@@ -686,40 +687,27 @@ export function FullWorkspace({
       <>
         <Heading
           eyebrow="YOUR INTENTFIELD LIBRARY"
-          title="Your next step is here."
+          title={
+            <>
+              My products.
+              <br />
+              <span className="warm-emphasis">One connected practice.</span>
+            </>
+          }
           description="Open the products available to your account."
         />
-        <div className="tools-grid">
-          {(
-            [
-              ["book", "Book + workbook", "$19", "book"],
-              ["course", "Prosperity 30 + platform", "$79", "today"],
-              ["audio", "Morning & Evening audio", "$29", "audio"],
-            ] as const
-          ).map(([sku, title, price, path]) => (
-            <section className="panel" key={sku}>
-              <p className="eyebrow">
-                {access[sku] ? "ACCESS INCLUDED" : "NOT INCLUDED"}
-              </p>
-              <h2>{title}</h2>
-              {access[sku] ? (
-                <ButtonLink href={href(path)}>
-                  Open{" "}
-                  {sku === "course"
-                    ? "my workspace"
-                    : sku === "book"
-                      ? "the book"
-                      : "audio"}
-                </ButtonLink>
-              ) : (
-                <>
-                  <p>{price} one-time offer</p>
-                  <p className="micro">Purchases are not open yet.</p>
-                </>
-              )}
-            </section>
-          ))}
-        </div>
+        <ProductLibrary
+          base={base}
+          access={access}
+          bookPublished={Boolean(item("book")?.storageId)}
+          recordingCount={
+            ["audio/morning", "audio/evening"].filter(
+              (key) => item(key)?.storageId,
+            ).length
+          }
+          nextLesson={next}
+          completed={completed}
+        />
         <p className="micro">
           This page shows access, not a payment receipt. Whop will manage
           purchases on both platforms.
@@ -745,7 +733,9 @@ export function FullWorkspace({
       title={
         active === "today"
           ? "Today"
-          : active.replace(/^./, (c) => c.toUpperCase())
+          : active === "purchases"
+            ? "My products"
+            : active.replace(/^./, (c) => c.toUpperCase())
       }
       accountMenu={accountMenu}
       owner={access.owner}

@@ -32,10 +32,16 @@ export function ButtonLink({
     </Link>
   );
 }
-export function BookObject({ small = false }: { small?: boolean }) {
+export function BookObject({
+  small = false,
+  mini = false,
+}: {
+  small?: boolean;
+  mini?: boolean;
+}) {
   return (
     <div
-      className={`book-object ${small ? "small-book" : ""}`}
+      className={`book-object ${mini ? "mini" : small ? "small-book" : ""}`}
       aria-hidden="true"
     >
       <div className="book-brand">
