@@ -25,6 +25,8 @@ The accepted launch-preview journey is now implemented in Next.js, with Clerk we
 
 Each product is independently authorized. A book-only member can use the workbook; audio does not require the course. Owner status enables content editing, not reading another member's notes. New accounts receive no products automatically. A trusted operator may issue a clearly identified complimentary grant; it must not be represented as a Whop payment.
 
+The confirmed owner review account now has separate complimentary grants for all three products and owner access to Content Studio. This was verified through normal Google/Clerk sign-in on the deployed preview: all products appeared included and the editor was accessible. No payment was created or charged.
+
 ## Content and storage
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.
