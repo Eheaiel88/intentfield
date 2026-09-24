@@ -47,7 +47,7 @@ TypeScript, ESLint, production build and twelve backend tests pass. Backend chec
 
 The comprehensive Clerk/Convex browser scenario passes locally: signed-out redirect, unentitled denial, Day 1 and Day 2 completion, guide save, workbook/tool persistence, twelve self-image inputs, ledger/review, all thirty lesson links, audio scripts, fresh-session resume, another account's empty workspace, book-only/audio restrictions, mobile overflow checks, navigation dialog, export and confirmed reset. Tests use reserved synthetic accounts and actual signed Clerk sessions; they do not verify a Whop charge. Temporary users are deleted and grants revoked; synthetic notes and audit records remain in the development database.
 
-Owner content draft/publication and real PDF/audio upload, delivery/playback and removal passed browser checks. The complete member scenario also passed against the protected Vercel deployment; `/dev/review/today` returned 404 there. A fresh browser context on this machine is not a test on a second physical device.
+Owner content draft/publication and real PDF/audio upload, delivery/playback and removal passed browser checks both locally and on Vercel. The complete member scenario also passed against the protected Vercel deployment; `/dev/review/today` returned 404 there. A fresh browser context on this machine is not a test on a second physical device.
 
 ## Commercial release work
 
