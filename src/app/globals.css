@@ -15,6 +15,8 @@
   --accent-ink: #101312;
   --danger: #ffb4a8;
   color-scheme: dark;
+  --text-caption: 0.875rem;
+  --text-body: 1rem;
 }
 
 /* Light mode keeps the chartreuse brand, with green text for readable contrast.
@@ -138,7 +140,7 @@ main:focus {
 }
 .micro {
   display: block;
-  font-size: 12px;
+  font-size: var(--text-caption);
   line-height: 1.55;
   letter-spacing: 0.01em;
 }
@@ -149,7 +151,7 @@ main:focus {
 }
 .eyebrow {
   color: var(--electric);
-  font-size: 11px;
+  font-size: var(--text-caption);
   font-weight: 700;
   letter-spacing: 0.12em;
   line-height: 1.6;
@@ -159,7 +161,7 @@ main:focus {
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  font-size: 14px;
+  font-size: var(--text-body);
   font-weight: 700;
   line-height: 1.5;
   padding: 12px 0;
@@ -184,7 +186,7 @@ main:focus {
   padding: 16px 22px;
   border: 1px solid transparent;
   border-radius: 7px;
-  font-size: 14px;
+  font-size: var(--text-body);
   font-weight: 700;
   line-height: 1.3;
   transition:
@@ -215,7 +217,7 @@ main:focus {
   background: var(--surface-soft, #2c352f);
 }
 .small {
-  font-size: 13px;
+  font-size: var(--text-body);
   min-height: 45px;
   padding: 13px 18px;
 }
@@ -246,7 +248,7 @@ main:focus {
   padding: 7px 20px;
   background: var(--surface-soft, #252c22);
   color: var(--electric);
-  font-size: 9px;
+  font-size: var(--text-caption);
   line-height: 1.5;
   letter-spacing: 0.09em;
   font-weight: 700;
@@ -272,14 +274,14 @@ main:focus {
 .site-nav nav {
   display: flex;
   gap: 36px;
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .site-nav nav a:hover {
   color: var(--electric);
 }
 .nav-caption {
-  font-size: 11px;
+  font-size: var(--text-caption);
   letter-spacing: 0.12em;
   color: var(--muted);
 }
@@ -294,13 +296,13 @@ main:focus {
   width: 165px;
 }
 .site-footer p {
-  font-size: 13px;
+  font-size: var(--text-body);
   margin: 0;
   color: var(--muted);
 }
 .site-footer > span {
   margin-left: auto;
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .skip {
@@ -380,7 +382,7 @@ main:focus {
   line-height: 1.6;
 }
 .hero .micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
 }
 .hero-bottom {
   position: absolute;
@@ -389,7 +391,7 @@ main:focus {
   right: 0;
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: var(--text-caption);
   letter-spacing: 0.14em;
   color: #c7cec3;
 }
@@ -487,7 +489,7 @@ main:focus {
   z-index: 1;
 }
 .object-caption {
-  font-size: 10px;
+  font-size: var(--text-caption);
   letter-spacing: 0.08em;
   color: var(--muted);
   margin-top: 36px;
@@ -532,11 +534,11 @@ main:focus {
   gap: 22px;
   padding: 18px 0;
   border-bottom: 1px solid var(--rule);
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 .included-lines b {
   color: var(--electric);
-  font-size: 11px;
+  font-size: var(--text-caption);
 }
 .method-section {
   background: var(--panel, #181e1a);
@@ -564,30 +566,30 @@ main:focus {
   border: 1px solid var(--rule);
   border-radius: 12px;
   overflow: hidden;
+  gap: 1px;
+  background: var(--rule);
 }
 .method-grid article {
   padding: 26px 20px;
-  border-right: 1px solid var(--rule);
-}
-.method-grid article:last-child {
-  border: 0;
+  background: var(--panel);
+  min-width: 0;
 }
 .method-grid article > span {
   display: block;
   color: var(--electric);
-  font-size: 12px;
-  margin-bottom: 40px;
+  font-size: var(--text-body);
+  margin-bottom: 28px;
 }
 .method-grid h3 {
-  font-size: 23px;
+  font-size: 24px;
 }
 .method-grid p {
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
+  font-size: var(--text-body);
+  line-height: 1.65;
 }
 .method-note {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
   margin-top: 25px;
 }
@@ -603,7 +605,7 @@ main:focus {
   border-bottom: 1px solid var(--rule);
 }
 .book-route span {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--electric);
 }
 .book-route h3 {
@@ -611,7 +613,7 @@ main:focus {
   font-size: 23px;
 }
 .book-route p {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--muted);
   margin: 0;
 }
@@ -648,7 +650,7 @@ main:focus {
 .price span {
   display: inline-block;
   font-weight: 400;
-  font-size: 13px;
+  font-size: var(--text-body);
   letter-spacing: 0;
   padding-left: 12px;
   color: var(--muted);
@@ -673,7 +675,7 @@ main:focus {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: var(--text-caption);
   color: var(--muted, #9ca696);
 }
 .purchase-progress li > span {
@@ -683,7 +685,7 @@ main:focus {
   border-radius: 50%;
   width: 26px;
   height: 26px;
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .purchase-progress .current {
   color: var(--paper);
@@ -726,7 +728,7 @@ main:focus {
   display: flex;
   gap: 20px;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: var(--text-body);
   padding: 15px 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -740,7 +742,7 @@ main:focus {
   margin: 24px 0;
 }
 .order-total span {
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 .order-total strong {
   font-size: 38px;
@@ -761,7 +763,7 @@ main:focus {
   margin-bottom: 10px;
 }
 .purchase-product p {
-  font-size: 14px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .pill {
@@ -769,7 +771,7 @@ main:focus {
   border: 1px solid var(--rule);
   border-radius: 4px;
   padding: 7px 10px;
-  font-size: 9px;
+  font-size: var(--text-caption);
   line-height: 1.2;
   letter-spacing: 0.05em;
   color: var(--electric);
@@ -784,10 +786,10 @@ main:focus {
   background: var(--panel, #171c18);
 }
 .preview-payment strong {
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 .preview-payment p {
-  font-size: 12px;
+  font-size: var(--text-body);
   line-height: 1.5;
   color: var(--muted);
   margin-top: 5px;
@@ -817,14 +819,14 @@ main:focus {
   margin-bottom: 10px;
 }
 .upgrade-benefits p {
-  font-size: 14px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .upgrade-benefits span {
   position: absolute;
   left: 0;
   top: 28px;
-  font-size: 11px;
+  font-size: var(--text-caption);
   color: var(--electric);
 }
 .workspace-teaser {
@@ -838,7 +840,7 @@ main:focus {
 .teaser-top {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: var(--text-caption);
   font-weight: 800;
   border-bottom: 1px solid var(--accent-border, #4d5a40);
   padding-bottom: 20px;
@@ -846,7 +848,7 @@ main:focus {
 }
 .teaser-top span {
   font-weight: 400;
-  font-size: 8px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .workspace-teaser h2 {
@@ -860,7 +862,7 @@ main:focus {
 .teaser-cycle {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  font-size: 9px;
+  font-size: var(--text-caption);
   gap: 15px;
   color: var(--muted);
   margin: 28px 0;
@@ -868,7 +870,7 @@ main:focus {
 .teaser-cta {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: var(--text-caption);
   font-weight: 700;
   background: var(--electric);
   color: var(--graphite);
@@ -876,7 +878,7 @@ main:focus {
   margin: 0 -28px -28px;
 }
 .upgrade-price > span {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .upgrade-price > strong {
@@ -887,18 +889,18 @@ main:focus {
   margin: 10px 0;
 }
 .upgrade-price small {
-  font-size: 12px;
+  font-size: var(--text-caption);
   letter-spacing: 0;
   font-weight: 400;
   color: var(--muted);
 }
 .upgrade-price > p {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
   margin: 8px 0 25px;
 }
 .upgrade-price > span.micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
   text-align: center;
   margin-top: 12px;
 }
@@ -907,7 +909,7 @@ main:focus {
   padding: 17px 6px;
   min-height: 48px;
   width: 100%;
-  font-size: 13px;
+  font-size: var(--text-body);
   text-decoration: underline;
   text-underline-offset: 4px;
   color: var(--paper);
@@ -945,14 +947,14 @@ main:focus {
 }
 .audio-card .eyebrow {
   color: var(--amber);
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 .audio-card h3 {
   font-size: 26px;
 }
 .audio-card > p:last-child,
 .audio-card > p:not(.eyebrow) {
-  font-size: 14px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .audio-card h2 {
@@ -960,7 +962,7 @@ main:focus {
 }
 .audio-card > .micro {
   margin-top: 20px;
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .audio-library .audio-card {
   padding: 40px;
@@ -1002,7 +1004,7 @@ main:focus {
   padding-bottom: 4px;
 }
 .selection-total span {
-  font-size: 10px;
+  font-size: var(--text-body);
   letter-spacing: 0.07em;
   color: var(--muted);
 }
@@ -1013,7 +1015,7 @@ main:focus {
   letter-spacing: -0.05em;
 }
 .selection-total small {
-  font-size: 11px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .access-grid {
@@ -1034,7 +1036,7 @@ main:focus {
   font-size: 30px;
 }
 .access-card p {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--muted);
   flex: 1;
 }
@@ -1043,7 +1045,7 @@ main:focus {
   margin-top: 12px;
 }
 .access-card > .micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
   margin-top: 18px;
 }
 .access-art {
@@ -1066,7 +1068,7 @@ main:focus {
   flex-direction: column;
 }
 .access-number span {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.16em;
   margin-top: 20px;
   color: var(--muted);
@@ -1103,7 +1105,7 @@ main:focus {
   width: 183px;
 }
 .nav-label {
-  font-size: 11px;
+  font-size: var(--text-caption);
   letter-spacing: 0.1em;
   color: var(--muted, #9ca696);
   margin: 0 12px 18px;
@@ -1152,7 +1154,7 @@ main:focus {
 .sidebar-access {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: var(--text-caption);
   border-top: 1px solid var(--rule);
   padding: 24px 12px 0;
   margin-top: 18px;
@@ -1169,7 +1171,7 @@ main:focus {
   justify-content: space-between;
   gap: 22px;
   padding: 0 44px;
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.08em;
   color: var(--muted);
 }
@@ -1185,12 +1187,12 @@ main:focus {
 }
 .app-topbar b {
   color: var(--paper);
-  font-size: 11px;
+  font-size: var(--text-caption);
   letter-spacing: 0;
   font-weight: 400;
 }
 .save-status {
-  font-size: 8px;
+  font-size: var(--text-caption);
   color: var(--muted, #b0bca8);
   white-space: nowrap;
 }
@@ -1213,7 +1215,7 @@ main:focus {
   max-width: 670px;
 }
 .page-heading .eyebrow {
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .today-grid {
   display: grid;
@@ -1240,10 +1242,10 @@ main:focus {
   margin-bottom: 35px;
 }
 .card-top .micro {
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 .today-main .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   margin-bottom: 18px;
 }
 .today-main h2 {
@@ -1252,7 +1254,7 @@ main:focus {
   margin-bottom: 17px;
 }
 .today-main > p:not(.eyebrow) {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--text-secondary, #cbd3c4);
   max-width: 410px;
 }
@@ -1265,12 +1267,12 @@ main:focus {
   padding-top: 22px;
 }
 .today-takeaway span {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.08em;
   color: var(--electric);
 }
 .today-takeaway p {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--text-secondary, #cbd3c4);
   max-width: 420px;
   margin-top: 8px;
@@ -1282,7 +1284,7 @@ main:focus {
   background: var(--panel, #1b211e);
 }
 .direction-card .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .direction-mark {
@@ -1298,11 +1300,11 @@ main:focus {
   overflow-wrap: anywhere;
 }
 .direction-card > p:not(.eyebrow) {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .direction-card > .text-link {
-  font-size: 12px;
+  font-size: var(--text-body);
 }
 .dashboard-cycle {
   margin: 44px 0 34px;
@@ -1311,16 +1313,17 @@ main:focus {
   gap: 15px;
   margin-bottom: 23px;
   align-items: flex-end;
+  flex-wrap: wrap;
 }
 .dashboard-cycle h2 {
-  font-size: 27px;
+  font-size: clamp(32px, 3.2vw, 42px);
 }
 .dashboard-cycle .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   margin-bottom: 12px;
 }
 .dashboard-cycle .micro {
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .dashboard-cycle > p {
   margin-top: 17px;
@@ -1334,19 +1337,19 @@ main:focus {
   padding: 22px 0;
 }
 .cycle-strip > span {
-  font-size: 11px;
+  font-size: var(--text-body);
   display: flex;
   gap: 6px;
   align-items: center;
   padding-right: 12px;
 }
 .cycle-strip b {
-  font-size: 9px;
+  font-size: var(--text-caption);
   color: var(--electric);
   font-weight: 400;
 }
 .cycle-strip small {
-  font-size: 8px;
+  font-size: var(--text-caption);
   letter-spacing: 0.08em;
   color: var(--muted, #a3af9b);
   margin-left: auto;
@@ -1369,7 +1372,7 @@ main:focus {
   border-color: var(--electric);
 }
 .dashboard-links .eyebrow {
-  font-size: 8px;
+  font-size: var(--text-caption);
   display: block;
   color: var(--muted);
   margin-bottom: 20px;
@@ -1379,7 +1382,7 @@ main:focus {
   margin-bottom: 12px;
 }
 .dashboard-links p {
-  font-size: 12px;
+  font-size: var(--text-body);
   color: var(--muted);
   margin-bottom: 24px;
 }
@@ -1393,7 +1396,7 @@ main:focus {
   margin-bottom: 40px;
 }
 .course-intro p {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
   margin-top: 20px;
 }
@@ -1426,11 +1429,11 @@ main:focus {
   line-height: 1.2;
 }
 .lesson-row p {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .lesson-status {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.03em;
   color: var(--electric);
   margin-left: auto;
@@ -1443,7 +1446,7 @@ main:focus {
 .back-link {
   margin-bottom: 28px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: var(--text-body);
 }
 .lesson-heading {
   display: flex;
@@ -1460,7 +1463,7 @@ main:focus {
 .guide-open {
   white-space: nowrap;
   min-height: 45px;
-  font-size: 12px;
+  font-size: var(--text-caption);
   padding: 13px 16px;
   margin-top: 30px;
 }
@@ -1470,7 +1473,7 @@ main:focus {
   gap: 48px;
 }
 .reading-label {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.1em;
   color: var(--muted);
   margin-bottom: 28px;
@@ -1488,7 +1491,7 @@ main:focus {
   letter-spacing: -0.02em;
 }
 .teaching > .micro {
-  font-size: 10px;
+  font-size: var(--text-caption);
   margin-top: -10px;
   margin-bottom: 28px;
 }
@@ -1499,7 +1502,7 @@ main:focus {
   margin: 32px 0;
 }
 .teaching-anchor .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 .teaching-anchor blockquote {
   font-size: 22px;
@@ -1519,14 +1522,14 @@ main:focus {
 .practice-steps li {
   padding-left: 10px;
   margin-bottom: 17px;
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.7;
 }
 .practice-steps li::marker {
   color: var(--electric);
 }
 .source-note {
-  font-size: 12px;
+  font-size: var(--text-caption);
   color: var(--muted);
   line-height: 1.6;
   margin: 28px 0;
@@ -1535,7 +1538,7 @@ main:focus {
   cursor: pointer;
   color: var(--text-secondary, #d0d8c8);
   padding: 12px 0;
-  font-size: 11px;
+  font-size: var(--text-caption);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -1566,7 +1569,7 @@ main:focus {
   margin: 0;
 }
 .exercise-header .micro {
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 .field {
   display: block;
@@ -1574,7 +1577,7 @@ main:focus {
 }
 .field > span {
   display: block;
-  font-size: 13px;
+  font-size: var(--text-body);
   line-height: 1.5;
   margin-bottom: 10px;
   color: var(--paper, #e0e5d9);
@@ -1591,7 +1594,7 @@ select {
   padding: 13px;
   border-radius: 7px;
   width: 100%;
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.6;
   min-width: 0;
 }
@@ -1603,7 +1606,7 @@ textarea {
 textarea::placeholder,
 input::placeholder {
   color: var(--muted, #9ba594);
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 input:focus,
 textarea:focus,
@@ -1625,10 +1628,10 @@ input[type="checkbox"] {
   margin-top: 30px;
 }
 .exercise-panel .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
 }
 .exercise-panel form > p:not(.eyebrow) {
-  font-size: 13px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .exercise-panel .full {
@@ -1641,13 +1644,13 @@ input[type="checkbox"] {
   background: var(--surface-tint, #1d251a);
 }
 .goal-context span {
-  font-size: 9px;
+  font-size: var(--text-caption);
   color: var(--electric);
   letter-spacing: 0.07em;
 }
 .goal-context p {
   margin-top: 6px;
-  font-size: 14px;
+  font-size: var(--text-body);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -1657,7 +1660,7 @@ input[type="checkbox"] {
   padding-top: 22px;
 }
 .saved-guide-note p {
-  font-size: 14px;
+  font-size: var(--text-body);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
@@ -1707,7 +1710,7 @@ input[type="checkbox"] {
   font-size: 34px;
 }
 .next-connection p:last-child {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .completion .actions {
@@ -1729,7 +1732,7 @@ input[type="checkbox"] {
   transition: border 0.2s;
 }
 .tool-card .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   color: var(--muted);
   margin-bottom: 30px;
 }
@@ -1738,12 +1741,12 @@ input[type="checkbox"] {
   margin-bottom: 18px;
 }
 .tool-card p {
-  font-size: 14px;
+  font-size: var(--text-body);
   color: var(--muted);
   flex: 1;
 }
 .tool-card .text-link {
-  font-size: 12px;
+  font-size: var(--text-body);
 }
 .tool-layout {
   display: grid;
@@ -1758,11 +1761,11 @@ input[type="checkbox"] {
   font-size: 35px;
 }
 .tool-instructions > p {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .tool-instructions > .eyebrow {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--electric);
 }
 .tool-instructions ol {
@@ -1770,12 +1773,12 @@ input[type="checkbox"] {
 }
 .tool-instructions li {
   padding: 0 0 18px 9px;
-  font-size: 15px;
+  font-size: var(--text-body);
   line-height: 1.7;
 }
 .tool-instructions li::marker {
   color: var(--electric);
-  font-size: 12px;
+  font-size: var(--text-caption);
 }
 .panel {
   padding: 28px;
@@ -1788,10 +1791,10 @@ input[type="checkbox"] {
 }
 .panel > p {
   color: var(--muted);
-  font-size: 15px;
+  font-size: var(--text-body);
 }
 .panel > .micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
   margin-top: 20px;
 }
 .profile-grid {
@@ -1807,11 +1810,11 @@ input[type="checkbox"] {
 .profile-grid legend {
   color: var(--electric);
   padding: 0 10px;
-  font-size: 13px;
+  font-size: var(--text-body);
   font-weight: 700;
 }
 .profile-grid select {
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 .profile-submit {
   grid-column: 1/-1;
@@ -1847,7 +1850,7 @@ input[type="checkbox"] {
   font-weight: 400;
 }
 .review-stats span {
-  font-size: 11px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .ledger-layout {
@@ -1869,11 +1872,11 @@ input[type="checkbox"] {
 .ledger-entries .panel > p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 .ledger-entries b {
   color: var(--paper);
-  font-size: 11px;
+  font-size: var(--text-caption);
 }
 .empty-state {
   padding: 60px 25px;
@@ -1891,7 +1894,7 @@ input[type="checkbox"] {
   font-size: 26px;
 }
 .empty-state p {
-  font-size: 14px;
+  font-size: var(--text-body);
   color: var(--muted);
 }
 .settings-grid {
@@ -1904,7 +1907,7 @@ input[type="checkbox"] {
   border-left: 3px solid var(--amber);
   padding: 15px;
   background: var(--warm-surface, #2c271f);
-  font-size: 13px;
+  font-size: var(--text-body);
   margin-bottom: 30px;
 }
 .reading-wrap {
@@ -1919,7 +1922,7 @@ input[type="checkbox"] {
   margin-bottom: 30px;
 }
 .book-heading .eyebrow {
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .book-heading h1 {
   font-size: 58px;
@@ -1929,7 +1932,7 @@ input[type="checkbox"] {
   font-size: 16px;
 }
 .book-heading > .button {
-  font-size: 12px;
+  font-size: var(--text-body);
   flex-shrink: 0;
 }
 .book-tabs {
@@ -1939,7 +1942,7 @@ input[type="checkbox"] {
   margin-bottom: 48px;
 }
 .book-tabs a {
-  font-size: 13px;
+  font-size: var(--text-body);
   padding: 17px 0;
   color: var(--muted);
 }
@@ -1984,13 +1987,13 @@ input[type="checkbox"] {
   width: 11px;
 }
 .reader-side > p {
-  font-size: 10px;
+  font-size: var(--text-body);
   letter-spacing: 0.09em;
   margin-top: 32px;
   color: var(--muted);
 }
 .reader-side > .micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
   max-width: 190px;
 }
 .reader > p {
@@ -2000,7 +2003,7 @@ input[type="checkbox"] {
   color: var(--text-secondary, #d8ddd2);
 }
 .reader > .reading-label {
-  font-size: 10px;
+  font-size: var(--text-caption);
   line-height: 1.5;
   color: var(--muted);
 }
@@ -2023,7 +2026,7 @@ input[type="checkbox"] {
   letter-spacing: -0.03em;
 }
 .reader > .micro {
-  font-size: 12px;
+  font-size: var(--text-caption);
   line-height: 1.6;
   color: var(--muted);
 }
@@ -2041,7 +2044,7 @@ input[type="checkbox"] {
   border: 0;
 }
 .worked-example span {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--electric);
   font-weight: 700;
 }
@@ -2069,7 +2072,7 @@ input[type="checkbox"] {
   font-size: 39px;
 }
 .workbook-layout aside > p {
-  font-size: 15px;
+  font-size: var(--text-body);
 }
 .checklist {
   border-top: 1px solid var(--rule);
@@ -2083,7 +2086,7 @@ input[type="checkbox"] {
 .checklist label {
   display: flex;
   gap: 12px;
-  font-size: 13px;
+  font-size: var(--text-body);
   line-height: 1.7;
   align-items: flex-start;
   margin: 18px 0;
@@ -2102,7 +2105,7 @@ input[type="checkbox"] {
   margin-bottom: 24px;
 }
 .pause-direction {
-  font-size: 11px;
+  font-size: var(--text-caption);
   display: block;
   color: var(--amber);
   letter-spacing: 0.05em;
@@ -2140,7 +2143,7 @@ dialog:not([open]) {
   margin-bottom: 22px;
 }
 .dialog-head .eyebrow {
-  font-size: 9px;
+  font-size: var(--text-caption);
   margin-bottom: 13px;
 }
 .dialog-head h2 {
@@ -2180,7 +2183,7 @@ dialog:not([open]) {
   backdrop-filter: blur(10px);
 }
 .review-control > span {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--electric);
   letter-spacing: 0.08em;
 }
@@ -2190,7 +2193,7 @@ dialog:not([open]) {
   border: 0;
   border-radius: 4px;
   padding: 11px 13px;
-  font-size: 11px;
+  font-size: var(--text-body);
 }
 .review-control button span {
   margin-left: 15px;
@@ -2199,7 +2202,7 @@ dialog:not([open]) {
   max-width: 750px;
 }
 .review-dialog > .muted {
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 .review-actions {
   display: flex;
@@ -2208,7 +2211,7 @@ dialog:not([open]) {
   flex-wrap: wrap;
 }
 .review-actions .button {
-  font-size: 12px;
+  font-size: var(--text-body);
 }
 .screen-links {
   display: grid;
@@ -2223,10 +2226,10 @@ dialog:not([open]) {
   gap: 12px;
   padding: 16px 0;
   border-bottom: 1px solid var(--rule);
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 .screen-links a > span:first-child {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--electric);
   min-width: 30px;
 }
@@ -2250,7 +2253,7 @@ dialog:not([open]) {
   border-bottom: 0;
 }
 .guide-disclosure {
-  font-size: 11px;
+  font-size: var(--text-caption);
   padding: 12px 15px;
   border: 1px solid var(--accent-border, #596446);
   background: var(--surface-tint, #293122);
@@ -2265,20 +2268,20 @@ dialog:not([open]) {
 .guide-context > span {
   display: block;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.08em;
 }
 .guide-context strong {
-  font-size: 13px;
+  font-size: var(--text-body);
   font-weight: 400;
   display: block;
   margin-top: 8px;
 }
 #guide-body > p {
-  font-size: 14px;
+  font-size: var(--text-body);
 }
 #guide-body > .micro {
-  font-size: 11px;
+  font-size: var(--text-caption);
 }
 .guide-options {
   margin: 25px 0;
@@ -2297,13 +2300,13 @@ dialog:not([open]) {
   margin: 12px 0;
 }
 .guide-options b {
-  font-size: 15px;
+  font-size: var(--text-body);
   color: var(--paper);
 }
 .guide-options span {
   grid-column: 1;
   grid-row: 2;
-  font-size: 12px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .guide-options button:hover {
@@ -2312,7 +2315,7 @@ dialog:not([open]) {
 .chat-message {
   padding: 18px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: var(--text-body);
   line-height: 1.75;
   margin: 16px 0;
 }
@@ -2323,7 +2326,7 @@ dialog:not([open]) {
   overflow-wrap: anywhere;
 }
 .chat-message.user small {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--text-secondary, #c6d0bd);
   display: block;
 }
@@ -2336,15 +2339,15 @@ dialog:not([open]) {
   margin-right: 15px;
 }
 .chat-message.guide > span {
-  font-size: 9px;
+  font-size: var(--text-caption);
   color: var(--electric);
 }
 .chat-message.guide > .micro {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--muted);
 }
 .guide-step {
-  font-size: 9px;
+  font-size: var(--text-caption);
   letter-spacing: 0.1em;
   color: var(--electric);
   margin: 28px 0 18px;
@@ -2356,11 +2359,11 @@ dialog:not([open]) {
   margin: 22px 0;
 }
 .guide-summary > span {
-  font-size: 10px;
+  font-size: var(--text-caption);
   color: var(--electric);
 }
 .guide-summary p {
-  font-size: 15px;
+  font-size: var(--text-body);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   margin: 10px 0 25px;
@@ -2383,7 +2386,7 @@ dialog:not([open]) {
   border-radius: 9px;
   background: var(--surface-tint, #26331e);
   color: var(--paper);
-  font-size: 13px;
+  font-size: var(--text-body);
   box-shadow: 0 8px 30px #0006;
   transition: 0.2s;
 }
@@ -2398,7 +2401,7 @@ dialog:not([open]) {
   width: 180px;
 }
 .teaching > .reading-label {
-  font-size: 10px;
+  font-size: var(--text-caption);
   line-height: 1.5;
 }
 @media (min-width: 1700px) {
@@ -2417,18 +2420,6 @@ dialog:not([open]) {
   }
   .split {
     gap: 55px;
-  }
-  .method-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .method-grid article:nth-child(3) {
-    border-right: 0;
-  }
-  .method-grid article:nth-child(-n + 3) {
-    border-bottom: 1px solid var(--rule);
-  }
-  .method-grid article > span {
-    margin-bottom: 25px;
   }
   .flow-grid {
     gap: 50px;
@@ -2576,7 +2567,7 @@ dialog:not([open]) {
     width: calc(100% - 40px);
   }
   .edition {
-    font-size: 8px;
+    font-size: var(--text-caption);
     gap: 6px;
     padding: 7px 10px;
     flex-wrap: wrap;
@@ -2584,7 +2575,7 @@ dialog:not([open]) {
     min-height: 39px;
   }
   .edition > span:last-child {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .site-nav {
     height: 82px;
@@ -2597,7 +2588,7 @@ dialog:not([open]) {
     display: none;
   }
   .site-nav > .small {
-    font-size: 10px;
+    font-size: var(--text-caption);
     gap: 10px;
     padding: 12px;
     min-height: 43px;
@@ -2621,7 +2612,7 @@ dialog:not([open]) {
     margin: 26px 0;
   }
   .hero .eyebrow {
-    font-size: 8px;
+    font-size: var(--text-caption);
     gap: 10px;
   }
   .short-rule {
@@ -2640,7 +2631,7 @@ dialog:not([open]) {
     font-size: 23px;
   }
   .hero-copy {
-    font-size: 15px;
+    font-size: var(--text-body);
     max-width: 430px;
   }
   .hero .actions {
@@ -2650,20 +2641,20 @@ dialog:not([open]) {
     margin: 28px 0 22px;
   }
   .hero .button {
-    font-size: 13px;
+    font-size: var(--text-body);
   }
   .hero .micro {
-    font-size: 10px;
+    font-size: var(--text-caption);
   }
   .hero-bottom {
-    font-size: 8px;
+    font-size: var(--text-caption);
     gap: 20px;
     bottom: 25px;
   }
   .opportunity-strip .wrap {
     flex-wrap: wrap;
     justify-content: center;
-    font-size: 13px;
+    font-size: var(--text-body);
     gap: 14px;
     padding: 18px 0;
   }
@@ -2703,30 +2694,7 @@ dialog:not([open]) {
   .section-heading > p {
     max-width: none;
     margin-top: 25px;
-    font-size: 15px;
-  }
-  .method-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .method-grid article {
-    border-bottom: 1px solid var(--rule) !important;
-    border-right: 1px solid var(--rule) !important;
-    padding: 24px 20px;
-  }
-  .method-grid article:nth-child(even) {
-    border-right: 0 !important;
-  }
-  .method-grid article:nth-last-child(-n + 2) {
-    border-bottom: 0 !important;
-  }
-  .method-grid h3 {
-    font-size: 24px;
-  }
-  .method-grid article > span {
-    margin-bottom: 26px;
-  }
-  .method-grid p {
-    font-size: 13px;
+    font-size: var(--text-body);
   }
   .book-route > div {
     grid-template-columns: 35px 1fr;
@@ -2738,7 +2706,7 @@ dialog:not([open]) {
   }
   .book-route p {
     grid-column: 2;
-    font-size: 14px;
+    font-size: var(--text-body);
   }
   .source-section {
     padding-left: 22px;
@@ -2748,10 +2716,10 @@ dialog:not([open]) {
     font-size: 32px;
   }
   .source-section > p {
-    font-size: 15px;
+    font-size: var(--text-body);
   }
   .source-section > .micro {
-    font-size: 11px;
+    font-size: var(--text-caption);
   }
   .offer-bottom {
     padding: 55px 0;
@@ -2768,12 +2736,12 @@ dialog:not([open]) {
     padding-top: 30px;
   }
   .site-footer p {
-    font-size: 12px;
+    font-size: var(--text-body);
   }
   .site-footer > span {
     width: 100%;
     margin: 0;
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .flow-wrap {
     padding-top: 20px;
@@ -2786,7 +2754,7 @@ dialog:not([open]) {
     padding-bottom: 23px;
   }
   .purchase-progress li {
-    font-size: 9px;
+    font-size: var(--text-caption);
     gap: 7px;
     flex-direction: column;
     align-items: flex-start;
@@ -2818,10 +2786,10 @@ dialog:not([open]) {
     font-size: 25px;
   }
   .purchase-product p {
-    font-size: 12px;
+    font-size: var(--text-body);
   }
   .purchase-product .pill {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .workspace-teaser h2 {
     font-size: 37px;
@@ -2842,10 +2810,10 @@ dialog:not([open]) {
     padding: 22px 18px;
   }
   .audio-card p:not(.eyebrow) {
-    font-size: 13px;
+    font-size: var(--text-body);
   }
   .audio-card .eyebrow {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .sound-art {
     height: 160px;
@@ -2867,7 +2835,7 @@ dialog:not([open]) {
     line-height: 1.2;
   }
   .selection-total span {
-    font-size: 9px;
+    font-size: var(--text-body);
   }
   .access-grid {
     grid-template-columns: 1fr;
@@ -2889,10 +2857,10 @@ dialog:not([open]) {
     padding: 0 20px;
   }
   .app-topbar > div > span {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .app-topbar b {
-    font-size: 11px;
+    font-size: var(--text-caption);
   }
   .app-topbar i {
     margin: 0 8px;
@@ -2901,7 +2869,7 @@ dialog:not([open]) {
     display: inline-grid;
     width: 33px;
     height: 33px;
-    font-size: 15px;
+    font-size: var(--text-body);
   }
   .app-main {
     padding: 35px 20px 90px;
@@ -2911,10 +2879,10 @@ dialog:not([open]) {
     line-height: 1.03;
   }
   .page-heading > p:last-child:not(.eyebrow) {
-    font-size: 15px;
+    font-size: var(--text-body);
   }
   .page-heading .eyebrow {
-    font-size: 9px;
+    font-size: var(--text-caption);
     margin-bottom: 18px;
   }
   .today-grid {
@@ -2932,7 +2900,7 @@ dialog:not([open]) {
     margin-bottom: 28px;
   }
   .card-top .micro {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .direction-card {
     padding: 26px;
@@ -2947,17 +2915,16 @@ dialog:not([open]) {
     font-size: 50px;
   }
   .direction-card .eyebrow {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .dashboard-cycle {
     margin: 36px 0 28px;
   }
   .dashboard-cycle h2 {
-    font-size: 28px;
     margin-bottom: 18px;
   }
   .dashboard-cycle .section-heading > .micro {
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .cycle-strip {
     gap: 15px 0;
@@ -2965,17 +2932,17 @@ dialog:not([open]) {
     grid-template-columns: repeat(3, 1fr);
   }
   .cycle-strip > span {
-    font-size: 10px;
+    font-size: var(--text-body);
     gap: 5px;
     padding: 0;
   }
   .cycle-strip b {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .cycle-strip small {
     grid-column: 1/-1;
     margin: 3px 0 0;
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .dashboard-links > a {
     padding: 22px;
@@ -2988,7 +2955,7 @@ dialog:not([open]) {
     font-size: 20px;
   }
   .lesson-row p {
-    font-size: 12px;
+    font-size: var(--text-body);
   }
   .lesson-status {
     font-size: 0;
@@ -3033,10 +3000,10 @@ dialog:not([open]) {
     font-size: 27px;
   }
   .exercise-header .micro {
-    font-size: 8px;
+    font-size: var(--text-caption);
   }
   .field > span {
-    font-size: 13px;
+    font-size: var(--text-body);
   }
   input,
   textarea,
@@ -3049,7 +3016,7 @@ dialog:not([open]) {
   }
   textarea::placeholder,
   input::placeholder {
-    font-size: 14px;
+    font-size: var(--text-body);
   }
   .completion {
     margin: 0 auto;
@@ -3098,10 +3065,10 @@ dialog:not([open]) {
     font-size: 35px;
   }
   .review-stats small {
-    font-size: 15px;
+    font-size: var(--text-body);
   }
   .review-stats span {
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .settings-grid {
     gap: 22px;
@@ -3116,10 +3083,10 @@ dialog:not([open]) {
     font-size: 46px;
   }
   .book-heading .eyebrow {
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .book-heading p:last-child {
-    font-size: 15px;
+    font-size: var(--text-body);
   }
   .book-heading > .button {
     max-width: none;
@@ -3130,7 +3097,7 @@ dialog:not([open]) {
     margin-bottom: 34px;
   }
   .book-tabs a {
-    font-size: 12px;
+    font-size: var(--text-caption);
   }
   .reader-layout {
     display: block;
@@ -3193,10 +3160,10 @@ dialog:not([open]) {
   }
   .review-control button {
     padding: 11px;
-    font-size: 10px;
+    font-size: var(--text-body);
   }
   .review-control > span {
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .review-dialog {
     padding: 24px;
@@ -3221,7 +3188,7 @@ dialog:not([open]) {
     font-size: 30px;
   }
   .guide-dialog .field > span {
-    font-size: 13px;
+    font-size: var(--text-body);
   }
   .chat-message {
     padding: 16px;
@@ -3239,7 +3206,7 @@ dialog:not([open]) {
     margin-bottom: 34px;
   }
   .mobile-nav .nav-item {
-    font-size: 14px;
+    font-size: var(--text-body);
     min-height: 52px;
   }
   .empty-page {
@@ -3252,7 +3219,7 @@ dialog:not([open]) {
     width: 153px;
   }
   .site-nav > .small {
-    font-size: 9px;
+    font-size: var(--text-caption);
     padding: 11px 9px;
     gap: 8px;
   }
@@ -3272,7 +3239,7 @@ dialog:not([open]) {
     flex-wrap: wrap;
   }
   .app-topbar b {
-    font-size: 10px;
+    font-size: var(--text-caption);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -3300,7 +3267,7 @@ dialog:not([open]) {
   padding: 10px 20px;
   background: var(--surface-soft, #252c22);
   color: var(--electric);
-  font-size: 12px;
+  font-size: var(--text-caption);
 }
 .dev-bar a {
   text-decoration: underline;
@@ -3313,14 +3280,14 @@ dialog:not([open]) {
   cursor: default;
 }
 .pending-item small {
-  font-size: 9px;
+  font-size: var(--text-caption);
   margin-left: auto;
 }
 .form-status {
   min-height: 24px;
   margin: 12px 0;
   color: var(--electric);
-  font-size: 13px;
+  font-size: var(--text-body);
 }
 .error-status {
   color: var(--danger, #ffb3a3);
@@ -3347,7 +3314,7 @@ dialog:not([open]) {
   opacity: 0.6;
 }
 .lesson-row.pending .lesson-status {
-  font-size: 10px;
+  font-size: var(--text-caption);
 }
 .preview-badge {
   position: fixed;
@@ -3377,7 +3344,7 @@ dialog:not([open]) {
   margin-top: 25px;
 }
 .lesson-form-warning {
-  font-size: 12px;
+  font-size: var(--text-caption);
   color: var(--muted);
   padding: 12px 0;
 }
@@ -3392,14 +3359,14 @@ dialog:not([open]) {
 }
 @media (max-width: 700px) {
   .dev-bar {
-    font-size: 10px;
+    font-size: var(--text-caption);
     gap: 10px;
   }
   .setup-page h1 {
     font-size: 38px;
   }
   .app-topbar .save-status {
-    font-size: 9px;
+    font-size: var(--text-caption);
   }
   .site-nav {
     gap: 15px;
@@ -3414,9 +3381,9 @@ dialog:not([open]) {
 }
 
 /* Website identity uses the accepted visual system; Whop stays independent. */
-.site-account,.member-account{display:flex;align-items:center;gap:22px}.member-sign-in{font-size:12px;color:var(--paper);white-space:nowrap}.member-sign-in:hover{color:var(--electric)}.auth-page{display:grid;grid-template-columns:1fr 440px;gap:70px;align-items:start;padding:70px 0 120px;min-height:70vh}.auth-intro{max-width:620px}.auth-intro h1{font-size:clamp(40px,4.6vw,64px)}.auth-intro .muted{max-width:490px}.auth-card{width:100%;min-width:0}.auth-card .cl-rootBox,.auth-card .cl-cardBox{width:100%;max-width:100%}.member-account{gap:15px}
+.site-account,.member-account{display:flex;align-items:center;gap:22px}.member-sign-in{font-size:var(--text-body);color:var(--paper);white-space:nowrap}.member-sign-in:hover{color:var(--electric)}.auth-page{display:grid;grid-template-columns:1fr 440px;gap:70px;align-items:start;padding:70px 0 120px;min-height:70vh}.auth-intro{max-width:620px}.auth-intro h1{font-size:clamp(40px,4.6vw,64px)}.auth-intro .muted{max-width:490px}.auth-card{width:100%;min-width:0}.auth-card .cl-rootBox,.auth-card .cl-cardBox{width:100%;max-width:100%}.member-account{gap:15px}
 @media(max-width:1000px){.auth-page{grid-template-columns:1fr;gap:35px;padding-top:40px}.auth-card{max-width:440px}.site-nav nav{gap:18px}}
-@media(max-width:700px){.site-nav{flex-wrap:wrap;height:auto;min-height:105px;padding-top:18px;padding-bottom:18px}.site-account{gap:14px}.site-account .button{font-size:11px;padding:11px;min-height:40px}.member-sign-in{font-size:11px}.auth-page{padding-top:30px;padding-bottom:60px}.member-account .save-status{display:none}}
+@media(max-width:700px){.site-nav{flex-wrap:wrap;height:auto;min-height:105px;padding-top:18px;padding-bottom:18px}.site-account{gap:14px}.site-account .button{font-size:var(--text-body);padding:11px;min-height:40px}.member-sign-in{font-size:var(--text-body)}.auth-page{padding-top:30px;padding-bottom:60px}.member-account .save-status{display:none}}
 
 /* Connected application surfaces */
 .preserve-lines { white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -3460,7 +3427,7 @@ audio { width:100%; margin:24px 0; }
   border: 1px solid var(--rule);
   border-radius: 9px;
   background: var(--graphite);
-  font-size: 13px;
+  font-size: var(--text-body);
   letter-spacing: 0;
 }
 .theme-toggle button {
@@ -3509,4 +3476,32 @@ audio { width:100%; margin:24px 0; }
   .app-topbar > div:first-child { min-width: 0; }
   .app-topbar > div:first-child > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .site-account { flex-wrap: wrap; gap: 12px; }
+}
+
+
+/* One method card system on the public page and the member dashboard. */
+.method-grid-wrap {
+  container: method / inline-size;
+}
+@container method (max-width: 1100px) {
+  .method-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@container method (max-width: 650px) {
+  .method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container method (max-width: 420px) {
+  .method-grid { grid-template-columns: minmax(0, 1fr); }
+  .method-grid article { padding: 24px; }
+  .method-grid article > span { margin-bottom: 16px; }
+}
+.dashboard-cycle > .method-note {
+  font-size: var(--text-body);
+  line-height: 1.65;
+}
+@media (max-width: 780px) {
+  .app-topbar .workspace-label { display: none; }
+  .app-topbar b { font-size: var(--text-body); }
+  .cycle-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-top { flex-wrap: wrap; }
+  .hero-bottom { position: static; padding-bottom: 24px; flex-wrap: wrap; gap: 12px; }
 }

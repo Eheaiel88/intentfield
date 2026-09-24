@@ -72,6 +72,21 @@ export const stages = [
   ["Build", "Express it through useful work."],
   ["Receive", "Notice, appreciate and learn."],
 ];
+export function MethodStages() {
+  return (
+    <div className="method-grid-wrap">
+      <div className="method-grid">
+        {stages.map(([name, description], index) => (
+          <article key={name}>
+            <span>0{index + 1}</span>
+            <h3>{name}</h3>
+            <p>{description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
 export function Cycle() {
   return (
     <div className="cycle-strip">

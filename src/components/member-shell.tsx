@@ -82,7 +82,10 @@ export function MemberShell({
                 ☰
               </button>
               <span>
-                YOUR WORKSPACE <i>/</i> <b>{title}</b>
+                <span className="workspace-label">
+                  YOUR WORKSPACE <i>/</i>{" "}
+                </span>
+                <b>{title}</b>
               </span>
             </div>
             <div className="member-account">

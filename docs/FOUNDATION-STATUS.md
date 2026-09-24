@@ -29,6 +29,8 @@ The confirmed owner review account now has separate complimentary grants for all
 
 The header offers Light and Dark appearance, saved in the current browser and synchronized across same-origin tabs. Both modes cover member pages, forms, dialogs, the owner editor and Clerk components. The default remains dark. Desktop and mobile navigation labels are 16px; the desktop sidebar is wider to keep labels readable.
 
+Captions and status text now use a 14px minimum, with descriptions, controls and form text at least 16px on desktop and mobile. The Today dashboard uses the same six numbered stage cards and descriptions as the landing page. Container queries choose six, three, two or one column based on available space. Small decorative lettering on the book artwork remains unchanged.
+
 ## Content and storage
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.

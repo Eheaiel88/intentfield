@@ -21,6 +21,8 @@ The interface keeps the accepted graphite/chartreuse design and six recurring st
 
 Light and Dark controls in the header change the whole interface, including account screens and the owner editor. Dark remains the default. The choice is saved per browser/origin, applied before first paint and synchronized between tabs on the same origin. Sidebar and mobile navigation labels are 16px, with wider desktop navigation to accommodate them.
 
+Interface captions and status labels use a 14px minimum; descriptions, controls and form text use at least 16px. Mobile styles retain those sizes. The Today dashboard and landing page share the same six-stage cards, with descriptions and a responsive layout that stacks on narrow screens. Smaller lettering is limited to decorative book-cover artwork.
+
 ## Configuration
 
 - Copy `.env.example` to ignored local configuration. Link only the dedicated IntentField services.

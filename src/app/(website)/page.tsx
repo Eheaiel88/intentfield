@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { PublicShell } from "@/components/public-shell";
-import { BookObject, ButtonLink, stages } from "@/components/brand";
+import { BookObject, ButtonLink, MethodStages } from "@/components/brand";
 import book from "@/lib/book-sample.json";
 export default function Home() {
   return (
@@ -127,15 +127,7 @@ export default function Home() {
               practice you bring into your life and work.
             </p>
           </div>
-          <div className="method-grid">
-            {stages.map(([n, t], i) => (
-              <article key={n}>
-                <span>0{i + 1}</span>
-                <h3>{n}</h3>
-                <p>{t}</p>
-              </article>
-            ))}
-          </div>
+          <MethodStages />
           <p className="method-note">
             A cycle to practice throughout the journey. Return to the stage that
             helps you with the situation in front of you.

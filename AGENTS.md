@@ -3,6 +3,7 @@
 - Next.js + Convex; standalone at myintentfield.com and an embedded Whop surface.
 - Whop handles payments on both surfaces. One-time offers: book/workbook $19, additional course/platform $79, additional audio $29.
 - Preserve the accepted launch-preview style: bridge imagery, graphite/chartreuse, bold sans typography. Six recurring stages, thirty lessons; do not turn them into sequential five-day chapters.
+- Keep interface captions/status text at least 14px and descriptions, controls and form text at least 16px, including mobile. Use the shared typography tokens; small decorative book-cover artwork is exempt. The dashboard and landing page share the `MethodStages` card component.
 - The full member framework and owner content studio are implemented. Current deployment status and remaining integration steps: README.md and docs/FOUNDATION-STATUS.md.
 - No private research, supplied books/audio, transcripts, credentials or member exports in this public repository. Only original public sample text and the course outline belong in source. Full paid content is in authorized Convex content records; keep it out of static bundles.
 - Every private Convex function must verify identity, product access and ownership. Never merge by email or trust purchase return URLs. No public access-grant mutation.

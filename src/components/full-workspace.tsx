@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useConvex } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { MemberShell } from "./member-shell";
-import { ButtonLink, Cycle } from "./brand";
+import { ButtonLink, Cycle, MethodStages } from "./brand";
 import { SavedForm, type Field } from "./saved-form";
 import { ContentStudio } from "./content-studio";
 import { LessonGuide } from "./lesson-guide";
@@ -227,8 +227,8 @@ export function FullWorkspace({
             </div>
             <span className="micro">{completed} OF 30 LESSONS COMPLETED</span>
           </div>
-          <Cycle />
-          <p>
+          <MethodStages />
+          <p className="method-note">
             These stages repeat within the daily work. Choose what helps with
             the situation in front of you.
           </p>
