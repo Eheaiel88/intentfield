@@ -48,6 +48,8 @@ export default function Home() {
             A seven-day beginning. A book you can return to.
             <br />
             One payment. Digital book, workbook and checklist.
+            <br />
+            Try the sample sales walkthrough. No payment is taken.
           </p>
         </div>
         <div className="hero-bottom wrap">

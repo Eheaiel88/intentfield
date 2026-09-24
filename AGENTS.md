@@ -9,6 +9,7 @@
 - No private research, supplied books/audio, transcripts, credentials or member exports in this public repository. Only original public sample text and the course outline belong in source. Full paid content is in authorized Convex content records; keep it out of static bundles.
 - Every private Convex function must verify identity, product access and ownership. Never merge by email or trust purchase return URLs. No public access-grant mutation.
 - Local /dev/review routes must return 404 in production. They are browser-only review storage, not verified member sessions or cloud persistence.
+- The public sample sales funnel is `/checkout` → `/checkout/course` → `/checkout/audio` → `/checkout/complete`. URL selections are display-only: never use them to grant access, create orders, or claim payment. Keep the simulation labels, optional declines and restart path.
 - Run npm run typecheck, npm run lint, npm test and npm run build for application/backend changes. Verify responsive UI against the accepted preview.
 - Website sign-in uses Clerk; its development integration is configured. Whop identity is a separate adapter and remains pending. Never add a bypass to unblock member access.
 

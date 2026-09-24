@@ -23,7 +23,7 @@ function ProductAction({
   );
 }
 
-function DailyRhythmArt() {
+export function DailyRhythmArt() {
   return (
     <div className="access-art audio-access" aria-hidden="true">
       <svg viewBox="0 0 80 80" focusable="false">

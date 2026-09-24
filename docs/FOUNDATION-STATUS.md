@@ -6,7 +6,8 @@ The accepted launch-preview journey is now implemented in Next.js, with Clerk we
 
 | Route | Function |
 | --- | --- |
-| `/`, `/sample`, `/checkout` | Accepted landing, original opening/PDF sample and truthful prelaunch offer |
+| `/`, `/sample` | Accepted landing and original opening/PDF sample |
+| `/checkout`, `/checkout/course`, `/checkout/audio`, `/checkout/complete` | Public sample book checkout, optional course/audio offers and final selection; no payments or grants |
 | `/sign-in`, `/sign-up` | Clerk authentication |
 | `/app/today` | Next incomplete lesson, chief aim and saved progress |
 | `/app/course`, `/app/lesson/1` through `/app/lesson/30` | All thirty written V2.1 lessons, private answers, draft saving, completion and next lesson |
@@ -33,6 +34,8 @@ Captions and status text now use a 14px minimum, with descriptions, controls and
 
 My Products now uses the accepted launch-preview panels: book cover, large 30 and orange sun/moon, with equal-height desktop cards, aligned actions, the public sample download and responsive stacking. Private product links still require the relevant entitlement; PDF and recording messages reflect the published library. Warm orange appears in page labels, selected serif headings, day indicators, reflection anchors, utility icons and focus outlines. The original sidebar sequence and separation are restored on desktop and mobile: Today, course, tools, self-image, ledger, book, audio; then weekly review, settings and My Products. Content Studio remains in a separate owner area.
 
+The landing page now opens the original sample sales journey, including book checkout, both optional upsells and the final illustrated selection page. The accept/decline paths total $19, $48, $98 or $127. Choices are display-only URL values, preserved through reload/back navigation and reset by restarting. All steps are public and clearly labeled as a simulation. No payment details are collected, no purchase or grant is written, and links into the member app retain normal Clerk/Convex checks. Browser checks cover all four paths, restart, reload and 320px layouts in addition to the automated checks.
+
 ## Content and storage
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.
@@ -51,7 +54,7 @@ Member forms use explicit save buttons, clear save/error status and an unsaved-c
 
 ## Verification
 
-TypeScript, ESLint, production build and twelve backend tests pass. Backend checks cover authentication, independent product access, account isolation, revision conflict handling, answer bounds, valid completion, profile blank/zero handling, account-scoped export/deletion, atomic/idempotent ledger creation, owner permissions, private drafts and publication.
+TypeScript, ESLint, production build, twelve backend tests and six sales-walkthrough tests pass. Backend checks cover authentication, independent product access, account isolation, revision conflict handling, answer bounds, valid completion, profile blank/zero handling, account-scoped export/deletion, atomic/idempotent ledger creation, owner permissions, private drafts and publication. Walkthrough checks cover all four price combinations, URL persistence, restart and invalid query values.
 
 The comprehensive Clerk/Convex browser scenario passes locally: signed-out redirect, unentitled denial, Day 1 and Day 2 completion, guide save, workbook/tool persistence, twelve self-image inputs, ledger/review, all thirty lesson links, audio scripts, fresh-session resume, another account's empty workspace, book-only/audio restrictions, mobile overflow checks, navigation dialog, export and confirmed reset. Tests use reserved synthetic accounts and actual signed Clerk sessions; they do not verify a Whop charge. Temporary users are deleted and grants revoked; synthetic notes and audit records remain in the development database.
 

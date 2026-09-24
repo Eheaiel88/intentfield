@@ -662,6 +662,90 @@ main:focus {
   padding-top: 30px;
   padding-bottom: 95px;
 }
+.walkthrough-banner {
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  text-align: center;
+}
+.sales-walkthrough .purchase-progress li {
+  font-size: var(--text-body);
+}
+.sales-walkthrough .purchase-progress a {
+  padding: 10px 0;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.sales-walkthrough .purchase-product .book-object {
+  flex-shrink: 0;
+}
+.sales-walkthrough .decline {
+  text-align: center;
+}
+.sales-walkthrough .teaser-top {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.walkthrough-products .product-card:only-child {
+  max-width: 580px;
+}
+.walkthrough-finish {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border-top: 1px solid var(--rule);
+  padding-top: 32px;
+  margin-top: 40px;
+}
+.walkthrough-finish h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.walkthrough-finish p {
+  max-width: 630px;
+  color: var(--muted);
+  font-size: var(--text-body);
+}
+.walkthrough-finish .button {
+  flex-shrink: 0;
+}
+.walkthrough-back {
+  margin-top: 32px;
+}
+.walkthrough-back a {
+  display: inline-block;
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: var(--text-body);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+@media (max-width: 780px) {
+  .sales-walkthrough .purchase-progress {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .sales-walkthrough .purchase-progress li {
+    max-width: none;
+    min-width: 0;
+  }
+  .sales-walkthrough .purchase-progress a {
+    padding: 0;
+  }
+  .walkthrough-finish {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 600px) {
+  .sales-walkthrough .audio-offer-cards {
+    grid-template-columns: 1fr;
+  }
+  .sales-walkthrough .purchase-product {
+    gap: 18px;
+  }
+}
 .purchase-progress {
   list-style: none;
   display: flex;
@@ -1158,7 +1242,8 @@ main:focus {
   line-height: 1.6;
   margin: 24px 0 0;
 }
-.warm-emphasis {
+.warm-emphasis,
+.flow-title .warm-emphasis {
   color: var(--amber);
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;

@@ -19,6 +19,8 @@ Today and progress, all thirty lessons, eight tools, workbook/checklist, self-im
 
 The interface keeps the accepted graphite/chartreuse design and six recurring stages: Desire, Discover, Align, Rehearse, Build and Receive. The book/workbook is $19, optional course/platform $79, and optional AM/PM audio $29, all one-time. Checkout is not yet open. Product access is not a payment receipt.
 
+The landing page's book buttons now open a complete **sample sales walkthrough**: `/checkout` → `/checkout/course` → `/checkout/audio` → `/checkout/complete`. Accept or decline each upsell to review the $19, $48, $98 or $127 selection, then restart or revisit earlier steps. Choices stay in the URL for reload/back navigation; no sign-in, payment details or purchase mutation is needed. Final member links still require normal account/product access. The original mock-up folders remain unchanged.
+
 Light and Dark controls in the header change the whole interface, including account screens and the owner editor. Dark remains the default. The choice is saved per browser/origin, applied before first paint and synchronized between tabs on the same origin. Sidebar and mobile navigation labels are 16px, with wider desktop navigation to accommodate them.
 
 Interface captions and status labels use a 14px minimum; descriptions, controls and form text use at least 16px. Mobile styles retain those sizes. The Today dashboard and landing page share the same six-stage cards, with descriptions and a responsive layout that stacks on narrow screens. Smaller lettering is limited to decorative book-cover artwork.
