@@ -2,15 +2,19 @@ import { SignIn, SignUp } from "@clerk/nextjs";
 import { Brand, ButtonLink } from "./brand";
 import { websiteAuthConfigured } from "@/lib/auth-config";
 import { SetupState } from "./setup-state";
+import { ThemeToggle } from "./theme-toggle";
 export function AuthPage({ signUp = false }: { signUp?: boolean }) {
   if (!websiteAuthConfigured()) return <SetupState />;
   return (
     <div className="wrap">
       <header className="site-nav">
         <Brand />
-        <ButtonLink href="/" className="text-link">
-          Back to IntentField
-        </ButtonLink>
+        <div className="site-account">
+          <ThemeToggle />
+          <ButtonLink href="/" className="text-link">
+            Back to IntentField
+          </ButtonLink>
+        </div>
       </header>
       <main id="main" className="auth-page">
         <section className="auth-intro">

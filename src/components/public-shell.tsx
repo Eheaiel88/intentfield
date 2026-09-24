@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand, ButtonLink } from "./brand";
+import { ThemeToggle } from "./theme-toggle";
 export function PublicShell({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -9,6 +10,7 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
           <Link href="/#inside">Inside the book</Link>
           <Link href="/#method">The method</Link>
         </nav>
+        <ThemeToggle />
         <div className="site-account">
           <Link href="/app/today" className="member-sign-in" prefetch={false}>
             Member sign in

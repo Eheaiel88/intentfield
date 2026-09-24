@@ -1,9 +1,11 @@
 import { Brand, ButtonLink } from "./brand";
+import { ThemeToggle } from "./theme-toggle";
 export function SetupState({ embedded = false }: { embedded?: boolean }) {
   return (
     <div className="wrap">
       <header className="site-nav">
         <Brand />
+        <ThemeToggle />
       </header>
       <main id="main" className="setup-page">
         <p className="eyebrow">INTENTFIELD / MEMBER ACCESS</p>

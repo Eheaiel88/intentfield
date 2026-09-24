@@ -27,6 +27,8 @@ Each product is independently authorized. A book-only member can use the workboo
 
 The confirmed owner review account now has separate complimentary grants for all three products and owner access to Content Studio. This was verified through normal Google/Clerk sign-in on the deployed preview: all products appeared included and the editor was accessible. No payment was created or charged.
 
+The header offers Light and Dark appearance, saved in the current browser and synchronized across same-origin tabs. Both modes cover member pages, forms, dialogs, the owner editor and Clerk components. The default remains dark. Desktop and mobile navigation labels are 16px; the desktop sidebar is wider to keep labels readable.
+
 ## Content and storage
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.
@@ -39,7 +41,7 @@ Member forms use explicit save buttons, clear save/error status and an unsaved-c
 
 - Convex project `intentfield`, development deployment `rugged-nightingale-644` in team `mark-198a2`.
 - Clerk application `app_3Jl9HTB86RFhkocqo2A6WkgnzLG`, development instance `ins_3Jl9HSoA9KQbymEBdFfdzlPnf9N`; signed `convex` audience tokens.
-- Vercel project `intentfield` in `marks-projects-fb2b2f72`, linked to the IntentField GitHub repository. Preview deployments use the existing development Clerk/Convex environment. Vercel deployment protection remains enabled.
+- Vercel project `intentfield` in `marks-projects-fb2b2f72`, linked to the IntentField GitHub repository. The main review URL is https://intentfield.vercel.app/app/today. Both Preview and the main branch's Production target use the existing development Clerk/Convex environment; missing main-target variables were corrected after the first GitHub build. Vercel deployment protection settings remain unchanged.
 - No DNS changes for `myintentfield.com`. No production Clerk/Convex environment or live sales configuration yet.
 - Whop business `biz_xeSK2pOhE9Sxuk` was accessible. App/catalog/runtime credentials remain pending; the admin MCP connection is not an application runtime key.
 

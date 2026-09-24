@@ -19,12 +19,14 @@ Today and progress, all thirty lessons, eight tools, workbook/checklist, self-im
 
 The interface keeps the accepted graphite/chartreuse design and six recurring stages: Desire, Discover, Align, Rehearse, Build and Receive. The book/workbook is $19, optional course/platform $79, and optional AM/PM audio $29, all one-time. Checkout is not yet open. Product access is not a payment receipt.
 
+Light and Dark controls in the header change the whole interface, including account screens and the owner editor. Dark remains the default. The choice is saved per browser/origin, applied before first paint and synchronized between tabs on the same origin. Sidebar and mobile navigation labels are 16px, with wider desktop navigation to accommodate them.
+
 ## Configuration
 
 - Copy `.env.example` to ignored local configuration. Link only the dedicated IntentField services.
 - Clerk: `clerk env pull --instance dev`. Configure a `convex` JWT template with audience `convex` and set `CLERK_JWT_ISSUER_DOMAIN` on the matching Convex deployment.
 - Convex: `npx convex dev --configure existing` for the correct project, then `npx convex dev` for development. Production provisioning remains a separate release step.
-- Vercel: the dedicated project is `intentfield`. Preview variables contain development Clerk keys and the IntentField development Convex URL. Exact Vercel deployment/branch/project origins are admitted by session checks; custom deployment origins use `APP_ORIGIN`.
+- Vercel: the dedicated project is `intentfield`; the working review app is https://intentfield.vercel.app/app/today. Both Preview and the main branch's Production target use the same development Clerk/Convex services for review. This target name does not mean commercial launch. Exact Vercel deployment/branch/project origins are admitted by session checks; custom deployment origins use `APP_ORIGIN`.
 - Whop entry is intentionally outside Clerk's provider/proxy boundary. Do not merge different channel identities by email.
 
 `grants.applyVerified` and `content.setOwner` are internal operator-only mutations, never browser APIs. Source identifiers must distinguish provider-backed purchases from expressly authorized complimentary access. A checkout return URL never establishes payment. Signed Whop events, ordering/reconciliation and live commerce are not implemented yet.

@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { Brand } from "./brand";
+import { ThemeToggle } from "./theme-toggle";
 export function MemberShell({
   base,
   active,
@@ -85,6 +86,7 @@ export function MemberShell({
               </span>
             </div>
             <div className="member-account">
+              <ThemeToggle />
               <span className="save-status">
                 {review ? "LOCAL REVIEW" : "PRIVATE WORKSPACE"}
               </span>
