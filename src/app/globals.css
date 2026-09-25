@@ -429,64 +429,19 @@ main:focus {
 }
 .book-object {
   width: 325px;
-  aspect-ratio: 0.71;
-  background: var(--graphite);
-  border: 1px solid #5e7150;
-  border-left: 12px solid #283127;
-  padding: 28px 24px 24px;
+  max-width: 100%;
+  background: #121412;
+  border: 1px solid #3a3f38;
+  border-left: 12px solid #3a3f38;
   position: relative;
   box-shadow: 20px 26px 60px #0007;
   transform: perspective(900px) rotateY(-9deg) rotateZ(-3deg);
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
-.book-brand {
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
-.book-brand span {
+.book-object img {
   display: block;
-  font-size: 7px;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  margin-top: 7px;
-  color: var(--muted);
-}
-.book-title {
-  font-size: 34px;
-  line-height: 1.03;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  margin-top: 32px;
-  z-index: 1;
-}
-.book-title strong {
-  color: var(--electric);
-}
-.book-stairs {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  position: absolute;
-  right: 22px;
-  bottom: 82px;
-  transform: rotate(-15deg);
-  opacity: 0.26;
-}
-.book-stairs i {
-  height: calc(16px * var(--n));
-  width: 17px;
-  background: var(--electric);
-}
-.book-foot {
-  margin-top: auto;
-  font-size: 8px;
-  letter-spacing: 0.1em;
-  line-height: 1.5;
-  padding-top: 26px;
-  z-index: 1;
+  width: 100%;
+  height: auto;
 }
 .object-caption {
   font-size: var(--text-caption);
@@ -497,32 +452,7 @@ main:focus {
 .book-object.mini {
   width: 125px;
   border-left-width: 6px;
-  padding: 12px 10px;
   box-shadow: 10px 12px 20px #0003;
-}
-.mini .book-brand {
-  font-size: 6px;
-}
-.mini .book-brand span {
-  font-size: 4px;
-  margin-top: 3px;
-}
-.mini .book-title {
-  font-size: 14px;
-  margin-top: 15px;
-}
-.mini .book-foot {
-  font-size: 4px;
-  padding-top: 8px;
-}
-.mini .book-stairs {
-  gap: 3px;
-  bottom: 28px;
-  right: 8px;
-}
-.mini .book-stairs i {
-  height: calc(7px * var(--n));
-  width: 7px;
 }
 .included-lines {
   border-top: 1px solid var(--rule);
@@ -923,12 +853,19 @@ main:focus {
 }
 .teaser-top {
   display: flex;
+  align-items: center;
+  gap: 16px;
   justify-content: space-between;
   font-size: var(--text-caption);
   font-weight: 800;
   border-bottom: 1px solid var(--accent-border, #4d5a40);
   padding-bottom: 20px;
   margin-bottom: 38px;
+}
+.teaser-top img {
+  width: 190px;
+  max-width: 100%;
+  height: auto;
 }
 .teaser-top span {
   font-weight: 400;
@@ -1191,9 +1128,6 @@ main:focus {
 }
 .product-card .book-object.mini {
   width: 150px;
-}
-.product-card .mini .book-title {
-  font-size: 17px;
 }
 .product-card h2 {
   font-size: clamp(28px, 2.1vw, 34px);
@@ -2158,29 +2092,6 @@ input[type="checkbox"] {
 .reader-side .book-object {
   width: 200px;
   border-left-width: 8px;
-  padding: 20px 17px;
-}
-.small-book .book-brand {
-  font-size: 9px;
-}
-.small-book .book-brand span {
-  font-size: 5px;
-}
-.small-book .book-title {
-  font-size: 21px;
-  margin-top: 20px;
-}
-.small-book .book-foot {
-  font-size: 5px;
-}
-.small-book .book-stairs {
-  bottom: 44px;
-  right: 10px;
-  gap: 5px;
-}
-.small-book .book-stairs i {
-  height: calc(10px * var(--n));
-  width: 11px;
 }
 .reader-side > p {
   font-size: var(--text-body);
@@ -2716,9 +2627,6 @@ dialog:not([open]) {
   .reader-side .book-object {
     width: 160px;
   }
-  .small-book .book-title {
-    font-size: 17px;
-  }
   .book-heading h1 {
     font-size: 48px;
   }
@@ -2870,9 +2778,6 @@ dialog:not([open]) {
   }
   .book-object {
     width: 270px;
-  }
-  .book-title {
-    font-size: 29px;
   }
   .book-feature h2 {
     font-size: 43px;
@@ -3604,9 +3509,8 @@ audio { width:100%; margin:24px 0; }
 @media(max-width:600px){.tools-grid{grid-template-columns:1fr;}.book-reading{font-size:17px;}.actions{flex-wrap:wrap;}dialog{max-width:calc(100vw - 24px);}.page-heading h1{overflow-wrap:break-word;}}
 
 
-/* Keep the cover and bridge photograph as fixed brand artwork in either theme. */
-.hero,
-.book-object {
+/* Keep the bridge photograph as fixed brand artwork in either theme. */
+.hero {
   --graphite: #101312;
   --paper: #f1f0e8;
   --electric: #d5ff52;

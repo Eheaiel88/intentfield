@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Arrow, BookObject, ButtonLink, stages } from "./brand";
+import { Arrow, BookObject, BrandWordmark, ButtonLink, stages } from "./brand";
 import { DailyRhythmArt } from "./product-library";
 import { PublicShell } from "./public-shell";
 import {
@@ -182,7 +182,7 @@ function CourseOffer() {
       <aside>
         <div className="workspace-teaser">
           <div className="teaser-top">
-            INTENTFIELD <span>YOUR WORKSPACE</span>
+            <BrandWordmark /> <span>YOUR WORKSPACE</span>
           </div>
           <span className="eyebrow">DAY 01 / PROSPERITY 30</span>
           <h2>
