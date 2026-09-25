@@ -39,7 +39,9 @@ My Products restores the launch-preview's book, Prosperity 30 and morning/evenin
 
 ## Content authoring
 
-An owner opens `/app/admin`, chooses an existing lesson/book/audio entry, saves a draft, then publishes it. The book supports a PDF and each audio practice supports a recording. Uploading a file publishes it to entitled members; removing it restores the script/sample state. Draft teaching does not appear in member queries. No paid source content belongs in public assets.
+The complete seven-day book is now published privately: eight chapters, 23 reusable workbook sections and three downloads (29-page book, 34-page workbook and two-page checklist). Read at `/app/book`, open a chapter at `/app/book/chapter/1`, or save workbook answers at `/app/book/worksheet/1`. All thirty course lessons include an explicit outcome and connection to the next lesson. The morning/evening recordings are still pending; their pilot scripts remain available.
+
+An owner opens `/app/admin`, chooses a lesson, chapter, worksheet, download or audio entry, saves a draft, then publishes it. The book and companion downloads support PDFs; each audio practice supports a recording. Uploading a file publishes it to entitled members; removing it restores the script/sample state. Draft teaching does not appear in member queries. No paid source content belongs in public assets.
 
 Initial content can be loaded from the separate original workspace:
 
@@ -62,6 +64,8 @@ npm run test:e2e
 
 E2E requires the running app, IntentField development credentials and authenticated Clerk/Convex CLIs. Install Chromium with `npx playwright install chromium`. It uses genuine signed sessions for reserved test users, synthetic grants and temporary media, then revokes grants/deletes users. Synthetic note/audit records remain for diagnosis. Set `TEST_BASE_URL` for hosted checks; protected previews accept an ignored temporary cookie file via `TEST_VERCEL_COOKIE_FILE`. Never commit cookies or browser state.
 
-See [implementation status](docs/FOUNDATION-STATUS.md). `myintentfield.com`, production identities/database, Whop embedded entry/checkout and final media are pending commercial-release work.
+The three Whop products and fixed one-time plans are created with branded artwork, but remain hidden until purchase-to-access is connected and tested. The IntentField Whop app is registered as unlisted against the existing Vercel project. Public catalog identifiers are in `src/lib/whop-catalog.ts`; these are never access credentials or payment evidence. The admin MCP connection does not supply a persistent server runtime key or authorize app installation.
+
+See [implementation status](docs/FOUNDATION-STATUS.md). `myintentfield.com`, production identities/database, Whop embedded entry/checkout and finished audio remain commercial-release work.
 
 This repository is public. Keep source books, recordings, transcripts, full paid curriculum, research, credentials and member exports outside it.

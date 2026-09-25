@@ -10,7 +10,12 @@ import { ContentStudio } from "./content-studio";
 import { LessonGuide } from "./lesson-guide";
 import { ProductLibrary } from "./product-library";
 import type { ContentItem, Note } from "@/lib/content";
-import { profileDomains } from "@/lib/content";
+import {
+  profileDomains,
+  isBookChapter,
+  isBookWorksheet,
+  isBookDownload,
+} from "@/lib/content";
 import outline from "@/lib/course-outline.json";
 import book from "@/lib/book-sample.json";
 type Lesson = {
@@ -72,7 +77,7 @@ function Media({ item }: { item: ContentItem }) {
       target="_blank"
       rel="noreferrer"
     >
-      Download the book PDF ↓
+      {item.key === "book" ? "Download the book PDF" : item.body.title} ↓
     </a>
   ) : (
     <audio
@@ -534,8 +539,95 @@ export function FullWorkspace({
         completed={completed}
       />
     );
-  else if (view === "book" || view === "book/workbook") {
+  else if (isBookChapter(view) || isBookWorksheet(view)) {
+    const entry = item(view);
+    const chapter = isBookChapter(view);
+    const number = Number(view.split("/").at(-1));
+    content = !entry ? (
+      <MissingContent />
+    ) : (
+      <>
+        <Heading
+          eyebrow={
+            chapter
+              ? `THE WEALTH PRIMER / CHAPTER ${number}`
+              : `MY WORKBOOK / PAGE ${number}`
+          }
+          title={entry.body.title}
+          description={entry.body.summary}
+        />
+        <div className="actions">
+          <ButtonLink
+            className="button quiet"
+            href={href(chapter ? "book" : "book/workbook")}
+          >
+            {chapter ? "All chapters" : "All worksheets"}
+          </ButtonLink>
+          <ButtonLink
+            className="text-link"
+            href={href(chapter ? "book/workbook" : "book")}
+          >
+            {chapter ? "Open my workbook" : "Return to the book"}
+          </ButtonLink>
+        </div>
+        <article className="book-reading">
+          {entry.body.paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+          {chapter ? (
+            <>
+              <section className="panel">
+                <h2>Make it your own</h2>
+                <ol>
+                  {entry.body.steps.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ol>
+                <h3>Carry it forward</h3>
+                <p>{entry.body.reflection}</p>
+              </section>
+              <div className="actions">
+                {number > 1 && (
+                  <ButtonLink
+                    className="button quiet"
+                    href={href(`book/chapter/${number - 1}`)}
+                  >
+                    Previous chapter
+                  </ButtonLink>
+                )}
+                <ButtonLink
+                  href={href(
+                    number < 8 ? `book/chapter/${number + 1}` : "book/workbook",
+                  )}
+                >
+                  {number < 8 ? "Next chapter →" : "Return to my practice →"}
+                </ButtonLink>
+              </div>
+            </>
+          ) : (
+            <section className="panel">
+              {noteForm(
+                view,
+                entry.body.fields.map((field) => ({
+                  ...field,
+                  ...(number === 3 ? { type: "rating" as const } : {}),
+                })),
+              )}
+            </section>
+          )}
+          <Sources item={entry} />
+        </article>
+      </>
+    );
+  } else if (view === "book" || view === "book/workbook") {
     const b = item("book");
+    const chapters = library
+      .filter((c) => isBookChapter(c.key))
+      .sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
+    const worksheets = library
+      .filter((c) => isBookWorksheet(c.key))
+      .sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
+    const downloads = library.filter((c) => isBookDownload(c.key));
     content = !b ? (
       <MissingContent />
     ) : (
@@ -550,7 +642,7 @@ export function FullWorkspace({
           description={
             view === "book"
               ? b.body.summary
-              : "Three lists. One chief focus. A first useful step."
+              : "Choose a page for the situation in front of you. Save your answers privately and return whenever you need."
           }
         />
         <div className="actions">
@@ -561,6 +653,9 @@ export function FullWorkspace({
             {view === "book" ? "Open my workbook" : "Return to the book"}
           </ButtonLink>
           <Media item={b} />
+          {downloads.map((download) => (
+            <Media key={download.key} item={download} />
+          ))}
           <a
             className="text-link"
             href="/downloads/intentfield-book-workbook-sample.pdf"
@@ -570,22 +665,57 @@ export function FullWorkspace({
             Download opening sample PDF ↓
           </a>
         </div>
+        {(view === "book" ? chapters : worksheets).length > 0 && (
+          <section className="book-contents">
+            <h2>
+              {view === "book"
+                ? "Your seven-day journey"
+                : "Your reusable practice pages"}
+            </h2>
+            <div className="lesson-list">
+              {(view === "book" ? chapters : worksheets).map((entry) => (
+                <ButtonLink
+                  key={entry.key}
+                  className="lesson-row"
+                  href={href(entry.key)}
+                >
+                  <span className="lesson-day">
+                    {entry.key.split("/").at(-1)?.padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3>{entry.body.title}</h3>
+                    <p>{entry.body.summary}</p>
+                  </div>
+                  <span className="lesson-status">
+                    {view === "book"
+                      ? "READ"
+                      : note(entry.key)
+                        ? "REVISIT"
+                        : "OPEN"}
+                  </span>
+                </ButtonLink>
+              ))}
+            </div>
+          </section>
+        )}
         {view === "book" ? (
           <article className="book-reading">
             {b.body.paragraphs.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
-            <section className="panel">
-              <p className="eyebrow">A FICTIONAL WORKED EXAMPLE</p>
-              <h2>{book.example.name}</h2>
-              <p>{book.example.context}</p>
-              {book.fields.map((f) => (
-                <div key={f.id}>
-                  <h3>{f.label}</h3>
-                  <p>{book.example[f.id as keyof typeof book.example]}</p>
-                </div>
-              ))}
-            </section>
+            {chapters.length === 0 && (
+              <section className="panel">
+                <p className="eyebrow">A FICTIONAL WORKED EXAMPLE</p>
+                <h2>{book.example.name}</h2>
+                <p>{book.example.context}</p>
+                {book.fields.map((f) => (
+                  <div key={f.id}>
+                    <h3>{f.label}</h3>
+                    <p>{book.example[f.id as keyof typeof book.example]}</p>
+                  </div>
+                ))}
+              </section>
+            )}
             <Sources item={b} />
             <ButtonLink href={href("book/workbook")}>
               Make it your own

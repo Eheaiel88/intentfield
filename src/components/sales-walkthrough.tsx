@@ -120,8 +120,8 @@ function BookCheckout() {
           Simulate $19 book purchase
         </ButtonLink>
         <p className="micro">
-          Live Whop checkout and the complete seven-day book are still being
-          prepared.
+          This sample does not process a payment. The complete seven-day book
+          and workbook are available in the member application with book access.
         </p>
         <ButtonLink href="/sample" className="text-link">
           Read the opening sample
@@ -382,7 +382,8 @@ function PreviewComplete({ selection }: { selection: PreviewSelection }) {
             </div>
             <p className="micro product-note">
               $19 sample selection. The opening sample is available now; the
-              full seven-day edition is being developed.
+              full seven-day edition is available inside the member application
+              with book access.
             </p>
           </article>
           {selection.course && (

@@ -3701,3 +3701,5 @@ audio { width:100%; margin:24px 0; }
   .card-top { flex-wrap: wrap; }
   .hero-bottom { position: static; padding-bottom: 24px; flex-wrap: wrap; gap: 12px; }
 }
+.book-contents { margin: 2rem 0 3rem; }
+.book-contents .lesson-row h3 { overflow-wrap: anywhere; }

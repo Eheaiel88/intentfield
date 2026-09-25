@@ -1,6 +1,6 @@
 # Working application — September 24, 2026
 
-The accepted launch-preview journey is now implemented in Next.js, with Clerk website identity and private Convex storage. This is a working development deployment for product review, not the commercial launch. Whop checkout/embedded identity, the final book and finished recordings are separate remaining release work.
+The accepted launch-preview journey is implemented in Next.js, with Clerk website identity and private Convex storage. The complete book/workbook/checklist and thirty written lessons are published privately, and the Whop catalog is created. This remains a development deployment for review: Whop checkout/embedded identity and finished recordings are still pending.
 
 ## Member framework
 
@@ -16,7 +16,9 @@ The accepted launch-preview journey is now implemented in Next.js, with Clerk we
 | `/app/tools`, `/app/tool/:id` | Eight source-grounded tools with saved responses |
 | `/app/profile` | Twelve separate self-image statements; blank remains different from zero |
 | `/app/ledger`, `/app/review` | Daily/weekly drafts and dated receiving reflections; atomic, retry-safe entry creation |
-| `/app/book`, `/app/book/workbook` | Original narrative opening, fictional example, eight worksheet fields, checklist and explicit copy to Day 1 |
+| `/app/book`, `/app/book/workbook` | Eight-chapter book, index of 23 reusable practice pages, three protected PDF download links, original first-direction form and explicit copy to Day 1 |
+| `/app/book/chapter/1` through `/app/book/chapter/8` | Full narrative chapters with an output, exercise, previous/next navigation and transition |
+| `/app/book/worksheet/1` through `/app/book/worksheet/23` | Private saved workbook responses, including self-image ratings that distinguish blank from zero |
 | `/app/audio`, `/app/audio/morning`, `/app/audio/evening` | Full AM/PM pilot scripts; native playback appears when an owner publishes a recording |
 | `/app/purchases` | Product-specific access, without falsely claiming a payment receipt |
 | `/app/settings` | Saved name, JSON export and explicitly confirmed deletion of one's own notes |
@@ -40,6 +42,8 @@ The landing page now opens the original sample sales journey, including book che
 
 Full paid curriculum is seeded into the private Convex content table from the original workspace using `node scripts/seed-reference.mjs /path/to/IntentField`. The script inserts missing entries without overwriting subsequent editorial work. The public repository contains only code, cleared assets, the original public sample and the outline, not the private curriculum or supplied source materials.
 
+The September 24 product release expands the book through the continuing fictional Maya/Jordan stories and preserves the original manuscripts/previews. Eight chapters, 23 workbook sections and two companion-download records bring the private library to 75 published entries. Three PDFs are attached through owner-only media functions: a 29-page book, 34-page printable workbook and two-page checklist. The PDF workbook is printable; saved interactive answers live in the app. Every course lesson retains its existing teaching and adds an explicit outcome and next-lesson bridge. Morning/evening entries still contain pilot scripts without recordings.
+
 The content studio edits plain text; it never executes authored HTML. Drafts remain owner-only until published. Revision checks reject stale updates. Member notes remain separate from teaching. Published media uses Convex storage, with access checked before its URL is returned. An entitled member can copy a downloaded file or its URL; this is ordinary protected delivery, not DRM. Replaced/removed files remain in storage for recovery and require a future retention policy.
 
 Member forms use explicit save buttons, clear save/error status and an unsaved-change warning on reload or link navigation. They do not silently claim autosave or offline persistence. Concurrent edits are rejected with an instruction to copy one's words and reload. Weekly reflection creation and clearing its draft are one transaction.
@@ -50,11 +54,13 @@ Member forms use explicit save buttons, clear save/error status and an unsaved-c
 - Clerk application `app_3Jl9HTB86RFhkocqo2A6WkgnzLG`, development instance `ins_3Jl9HSoA9KQbymEBdFfdzlPnf9N`; signed `convex` audience tokens.
 - Vercel project `intentfield` in `marks-projects-fb2b2f72`, linked to the IntentField GitHub repository. The main review URL is https://intentfield.vercel.app/app/today. Both Preview and the main branch's Production target use the existing development Clerk/Convex environment; missing main-target variables were corrected after the first GitHub build. Vercel deployment protection settings remain unchanged.
 - No DNS changes for `myintentfield.com`. No production Clerk/Convex environment or live sales configuration yet.
-- Whop business `biz_xeSK2pOhE9Sxuk` was accessible. App/catalog/runtime credentials remain pending; the admin MCP connection is not an application runtime key.
+- Whop business `biz_xeSK2pOhE9Sxuk`: three hidden products and one-time USD plans, with branded covers and adaptive pricing disabled. Book `prod_1Fjx6emesjwl5` / `plan_55mR1Gb7ydVaR` ($19); course `prod_PQjYan54CWXvv` / `plan_VBYHNxWOs9KQG` ($79); audio `prod_9CR6SscWISttH` / `plan_vjX3WRljDFF4B` ($29). No charge, renewal or affiliate enrollment was created.
+- Whop app `app_hA6Q15wmNvxibS` is registered as unlisted against `https://intentfield.vercel.app`, with `/experiences/[experienceId]` as the experience path. Registration also creates a separate app-product record; it is not a duplicate paid offer.
+- App installation is pending: the MCP rejected experience creation for missing `app_authorization:create`. Runtime-key creation awaits the required browser confirmation. No checkout handler, verified Whop identity adapter or webhook/refund/reconciliation implementation is claimed. Whop also requires the owner to complete identity verification and 2FA for payouts.
 
 ## Verification
 
-TypeScript, ESLint, production build, twelve backend tests and six sales-walkthrough tests pass. Backend checks cover authentication, independent product access, account isolation, revision conflict handling, answer bounds, valid completion, profile blank/zero handling, account-scoped export/deletion, atomic/idempotent ledger creation, owner permissions, private drafts and publication. Walkthrough checks cover all four price combinations, URL persistence, restart and invalid query values.
+TypeScript, ESLint, production build and twenty tests pass. Backend checks cover authentication, independent product access, account isolation, revision conflict handling, answer bounds, valid completion, profile blank/zero handling, account-scoped export/deletion, atomic/idempotent ledger creation, owner permissions, private drafts and publication. New checks cover book-only chapter/workbook access, private saved workbook answers, worksheet bounds, zero/skipped ratings, owner-only PDF attachment, MIME validation, stale uploads and revoked download access. Walkthrough checks cover all four price combinations, URL persistence, restart and invalid query values.
 
 The comprehensive Clerk/Convex browser scenario passes locally: signed-out redirect, unentitled denial, Day 1 and Day 2 completion, guide save, workbook/tool persistence, twelve self-image inputs, ledger/review, all thirty lesson links, audio scripts, fresh-session resume, another account's empty workspace, book-only/audio restrictions, mobile overflow checks, navigation dialog, export and confirmed reset. Tests use reserved synthetic accounts and actual signed Clerk sessions; they do not verify a Whop charge. Temporary users are deleted and grants revoked; synthetic notes and audit records remain in the development database.
 
@@ -62,10 +68,10 @@ Owner content draft/publication and real PDF/audio upload, delivery/playback and
 
 ## Commercial release work
 
-1. Finish/review final book, workbook and audio, then publish through Content Studio.
+1. Record and listen-review the morning/evening audio, then publish through Content Studio. The complete book, workbook, checklist and written course are available for owner review now.
 2. Configure production Clerk/Convex and `myintentfield.com`; keep identities distinct until an explicit migration/linking process is designed.
-3. Register/verify the Whop embedded app and its independent identity adapter.
-4. Configure the $19/$79/$29 Whop catalog and verified checkout/events, refunds, reconciliation and recovery on both surfaces.
+3. Install/authorize the registered Whop app and implement its independent identity adapter.
+4. Connect the existing $19/$79/$29 catalog to verified checkout/events, refunds, reconciliation and recovery on both surfaces; then test before making the offers public.
 5. Confirm access terms, policies, support, backups, monitoring and release checks before paid acquisition.
 
-This framework does not claim that checkout, a live AI counselor, finished recordings or the final production PDF have already shipped.
+This framework does not claim that paid checkout, a live AI counselor or finished recordings have shipped. The completed PDFs and written curriculum are delivered through the review application's protected member library.

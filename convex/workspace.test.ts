@@ -52,13 +52,11 @@ test("all workspace reads require identity; each worksheet checks the appropriat
     }),
   ).rejects.toThrow("Prosperity 30");
   await expect(
-    t
-      .withIdentity(bob)
-      .mutation(api.workspace.saveNote, {
-        key: "workbook",
-        values: { focus: "x" },
-        expectedRevision: 0,
-      }),
+    t.withIdentity(bob).mutation(api.workspace.saveNote, {
+      key: "workbook",
+      values: { focus: "x" },
+      expectedRevision: 0,
+    }),
   ).rejects.toThrow("access");
   expect(
     (await t.withIdentity(bob).query(api.workspace.snapshot, {})).notes,
@@ -77,6 +75,128 @@ test("all workspace reads require identity; each worksheet checks the appropriat
       expectedRevision: 0,
     }),
   ).rejects.toThrow("another session");
+});
+test("the complete book stays independent of course access and private to its reader", async () => {
+  const t = setup();
+  await grant(t, "book");
+  await grant(t, "course", bob.tokenIdentifier);
+  await t.mutation(internal.content.seed, {
+    items: [
+      {
+        key: "book/chapter/8",
+        sku: "book",
+        body: { ...emptyBody(), title: "Final chapter" },
+      },
+      {
+        key: "book/worksheet/23",
+        sku: "book",
+        body: { ...emptyBody(), title: "Four-week record" },
+      },
+      {
+        key: "book/download/workbook",
+        sku: "book",
+        body: { ...emptyBody(), title: "Workbook PDF" },
+      },
+    ],
+  });
+  const a = t.withIdentity(alice),
+    b = t.withIdentity(bob);
+  expect(await a.query(api.content.library, {})).toHaveLength(3);
+  expect(await b.query(api.content.library, {})).toHaveLength(0);
+  await a.mutation(api.workspace.saveNote, {
+    key: "book/worksheet/23",
+    values: { review: "Private book notes" },
+    expectedRevision: 0,
+  });
+  await expect(
+    b.mutation(api.workspace.saveNote, {
+      key: "book/worksheet/23",
+      values: {},
+      expectedRevision: 0,
+    }),
+  ).rejects.toThrow("Book and workbook");
+  expect((await b.query(api.workspace.snapshot, {})).notes).toHaveLength(0);
+  await expect(
+    a.mutation(api.workspace.saveNote, {
+      key: "book/worksheet/24",
+      values: {},
+      expectedRevision: 0,
+    }),
+  ).rejects.toThrow("Unknown");
+  await a.mutation(api.workspace.saveNote, {
+    key: "book/worksheet/3",
+    values: { answer1: "0", answer2: "" },
+    expectedRevision: 0,
+  });
+  await expect(
+    a.mutation(api.workspace.saveNote, {
+      key: "book/worksheet/3",
+      values: { answer1: "11" },
+      expectedRevision: 1,
+    }),
+  ).rejects.toThrow("0 to 10");
+  expect((await a.query(api.workspace.exportMyNotes, {})).notes).toHaveLength(
+    2,
+  );
+});
+test("book companion downloads require PDF media, owner publication and current book access", async () => {
+  const t = setup();
+  await t.mutation(internal.content.seed, {
+    items: [
+      {
+        key: "book/download/checklist",
+        sku: "book",
+        body: { ...emptyBody(), title: "Checklist" },
+      },
+    ],
+  });
+  await grant(t, "book");
+  const a = t.withIdentity(alice);
+  const pdf = await t.run((ctx) =>
+    ctx.storage.store(new Blob(["%PDF-test"], { type: "application/pdf" })),
+  );
+  const wrong = await t.run((ctx) =>
+    ctx.storage.store(new Blob(["audio"], { type: "audio/mpeg" })),
+  );
+  await t.run(async (ctx) => {
+    // convex-test's storeBlob omits MIME metadata that real uploads retain.
+    // Populate only the test fixtures; production system tables are read-only.
+    // @ts-expect-error Test-only system table fixture.
+    await ctx.db.patch(pdf, { contentType: "application/pdf" });
+    // @ts-expect-error Test-only system table fixture.
+    await ctx.db.patch(wrong, { contentType: "audio/mpeg" });
+  });
+  const args = {
+    key: "book/download/checklist",
+    storageId: pdf,
+    fileName: "checklist.pdf",
+    expectedRevision: 1,
+  };
+  await expect(a.mutation(api.content.attachMedia, args)).rejects.toThrow(
+    "Owner",
+  );
+  await t.mutation(internal.content.setOwner, {
+    principal: alice.tokenIdentifier,
+  });
+  await expect(
+    a.mutation(api.content.attachMedia, { ...args, storageId: wrong }),
+  ).rejects.toThrow("Choose a PDF");
+  await a.mutation(api.content.attachMedia, args);
+  expect((await a.query(api.content.media, { key: args.key }))?.fileName).toBe(
+    "checklist.pdf",
+  );
+  await expect(a.mutation(api.content.attachMedia, args)).rejects.toThrow(
+    "Reload",
+  );
+  await t.mutation(internal.grants.applyVerified, {
+    principal: alice.tokenIdentifier,
+    sku: "book",
+    source: alice.tokenIdentifier + "book",
+    active: false,
+  });
+  await expect(a.query(api.content.media, { key: args.key })).rejects.toThrow(
+    "Book and workbook",
+  );
 });
 test("self-image preserves zero and skipped answers, validates ratings; any lesson persists with correct completion", async () => {
   const t = setup();
@@ -136,13 +256,11 @@ test("export and clear are strictly account scoped and never remove product acce
   const t = setup();
   for (const p of [alice, bob]) {
     await grant(t, "course", p.tokenIdentifier);
-    await t
-      .withIdentity(p)
-      .mutation(api.workspace.saveNote, {
-        key: "draft/daily",
-        values: { experience: p.subject },
-        expectedRevision: 0,
-      });
+    await t.withIdentity(p).mutation(api.workspace.saveNote, {
+      key: "draft/daily",
+      values: { experience: p.subject },
+      expectedRevision: 0,
+    });
   }
   const a = t.withIdentity(alice);
   expect(

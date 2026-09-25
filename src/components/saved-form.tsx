@@ -127,16 +127,18 @@ export function SavedForm({
               <option value="">Skip / not answered</option>
               {Array.from({ length: 11 }, (_, n) => (
                 <option key={n} value={n}>
-                  {n} —{" "}
+                  {n}
                   {n === 0
-                    ? "Not true for me now"
+                    ? " — Not true now"
                     : n === 10
-                      ? "Consistently true"
+                      ? " — Consistently true now"
                       : n === 5
-                        ? "Partly true"
-                        : n < 5
-                          ? "Sometimes true"
-                          : "Often true"}
+                        ? " — Partly true"
+                        : n === 2
+                          ? " — Rarely"
+                          : n === 8
+                            ? " — Often"
+                            : ""}
                 </option>
               ))}
             </select>

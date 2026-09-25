@@ -3,8 +3,9 @@ import { v, ConvexError } from "convex/values";
 import { identity, hasProduct, requireProduct } from "./access";
 import { toolIds, profileDomains, type Product } from "../src/lib/content";
 import { completionError, type Answers } from "../src/lib/lesson";
+import { isBookWorksheet } from "../src/lib/content";
 function productFor(key: string): Product | null {
-  if (key === "workbook") return "book";
+  if (key === "workbook" || isBookWorksheet(key)) return "book";
   if (key === "settings") return null;
   if (
     key === "profile" ||
@@ -96,6 +97,16 @@ export const saveNote = mutation({
           "Choose a rating from 0 to 10, or leave it unanswered.",
         );
     }
+    if (
+      args.key === "book/worksheet/3" &&
+      Object.entries(args.values).some(
+        ([key, value]) =>
+          !/^answer([1-9]|1[0-2])$/.test(key) || !/^(|[0-9]|10)$/.test(value),
+      )
+    )
+      throw new ConvexError(
+        "Choose a rating from 0 to 10, or leave it unanswered.",
+      );
     if (args.key.startsWith("ledger/") && !args.values.experience?.trim())
       throw new ConvexError(
         "Describe what happened before saving a reflection.",

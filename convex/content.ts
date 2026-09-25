@@ -3,6 +3,11 @@ import { v, ConvexError } from "convex/values";
 import { contentBody, sku } from "./schema";
 import { identity, hasProduct, requireProduct, requireOwner } from "./access";
 import type { ContentBody, Product } from "../src/lib/content";
+import {
+  isBookChapter,
+  isBookWorksheet,
+  isBookDownload,
+} from "../src/lib/content";
 function validate(key: string, product: Product, body: ContentBody) {
   const valid =
     product === "course"
@@ -13,7 +18,10 @@ function validate(key: string, product: Product, body: ContentBody) {
         key === "profile"
       : product === "audio"
         ? /^audio\/(morning|evening)$/.test(key)
-        : key === "book";
+        : key === "book" ||
+          isBookChapter(key) ||
+          isBookWorksheet(key) ||
+          isBookDownload(key);
   if (!valid) throw new ConvexError("Invalid content location.");
   if (
     !body.title.trim() ||
@@ -144,7 +152,8 @@ export const attachMedia = mutation({
       .unique();
     if (
       !item ||
-      !["book", "audio/morning", "audio/evening"].includes(item.key) ||
+      (!isBookDownload(item.key) &&
+        !["book", "audio/morning", "audio/evening"].includes(item.key)) ||
       item.revision !== args.expectedRevision
     )
       throw new ConvexError("Reload this media entry before uploading.");
@@ -152,7 +161,7 @@ export const attachMedia = mutation({
     if (
       !meta ||
       meta.size > 250 * 1024 * 1024 ||
-      (item.key === "book"
+      (item.sku === "book"
         ? meta.contentType !== "application/pdf"
         : ![
             "audio/mpeg",

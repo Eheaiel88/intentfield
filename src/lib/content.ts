@@ -1,4 +1,10 @@
 export type Product = "book" | "course" | "audio";
+export const isBookChapter = (key: string) =>
+  /^book\/chapter\/[1-8]$/.test(key);
+export const isBookWorksheet = (key: string) =>
+  /^book\/worksheet\/([1-9]|1\d|2[0-3])$/.test(key);
+export const isBookDownload = (key: string) =>
+  /^book\/download\/(workbook|checklist)$/.test(key);
 export type ContentBody = {
   title: string;
   summary: string;
@@ -74,6 +80,8 @@ export function validView(view: string) {
       "purchases",
       "admin",
     ].includes(view) ||
+    isBookChapter(view) ||
+    isBookWorksheet(view) ||
     /^lesson\/([1-9]|[12]\d|30)(\/complete)?$/.test(view) ||
     toolIds.some((id) => view === `tool/${id}`)
   );

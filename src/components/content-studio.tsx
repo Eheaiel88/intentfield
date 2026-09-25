@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import type { ContentBody } from "@/lib/content";
+import { isBookDownload, isBookChapter, type ContentBody } from "@/lib/content";
 import type { Id } from "../../convex/_generated/dataModel";
 export function ContentStudio() {
   const items = useQuery(api.content.ownerList, {});
@@ -163,7 +163,7 @@ function ContentEditor({
         )}
         {!item.key.startsWith("audio/") &&
           paragraphs("steps", "Practice steps")}
-        {item.key.startsWith("lesson/") && (
+        {(item.key.startsWith("lesson/") || isBookChapter(item.key)) && (
           <>
             {text("action", "Action in the world")}
             {text("reflection", "Reflection prompt")}
@@ -213,11 +213,13 @@ function ContentEditor({
                 : "Members see this published version.")}
         </p>
       </section>
-      {(item.key === "book" || item.key.startsWith("audio/")) && (
+      {(item.key === "book" ||
+        isBookDownload(item.key) ||
+        item.key.startsWith("audio/")) && (
         <section className="panel">
           <h2>
-            {item.key === "book"
-              ? "Production book PDF"
+            {item.key.startsWith("book")
+              ? "Published PDF"
               : "Finished audio recording"}
           </h2>
           <p>
@@ -253,11 +255,15 @@ function ContentEditor({
           </p>
           <label className="field">
             <span>
-              {item.key === "book" ? "Choose a PDF" : "Choose an audio file"}
+              {item.key.startsWith("book")
+                ? "Choose a PDF"
+                : "Choose an audio file"}
             </span>
             <input
               type="file"
-              accept={item.key === "book" ? "application/pdf" : "audio/*"}
+              accept={
+                item.key.startsWith("book") ? "application/pdf" : "audio/*"
+              }
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             />
           </label>

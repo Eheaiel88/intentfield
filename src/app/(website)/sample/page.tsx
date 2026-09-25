@@ -60,7 +60,8 @@ export default function Sample() {
               <p>{book.sourceNote}</p>
               <p>
                 This is the opening chapter and first worksheet. The complete
-                seven-day edition remains in development.
+                seven-day edition is available inside the member application
+                with book access.
               </p>
             </details>
             <div className="sample-footer">
