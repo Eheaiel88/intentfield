@@ -58,9 +58,11 @@ As built:
 
 Remaining to accept Phase 1: commit/deploy, then open the experience as a real Whop test user from the Whop sidebar (needs the app experience attached to a product — Phase 5 step 1 — or Whop's app preview) and confirm workspace, entitlement gating and no website chrome. `WHOP_CONVEX_SIGNING_KEY` is set on Vercel (production + preview) and in `.env.local`; `WHOP_CONVEX_JWKS` is set on the dev Convex deployment and must be set on the production deployment when it exists.
 
-## Phase 2 — Two separate account databases (no linking)
+## Phase 2 — Two separate account databases (no linking) — DONE 29 Sep 2026
 
 Goal: the website and the Whop surface each own their accounts, progress and notes; nothing merges.
+
+Status: the separation is structural (Phase 1 principals), verified and documented. `convex/surface-isolation.test.ts` locks the invariant: same verified email on both surfaces → two independent workspaces and entitlements; a matching subject under a different issuer cannot collide; owner status does not cross. The backend contains no email usage at all (checked). Support posture and macros: `docs/SUPPORT.md`.
 
 1. Two member namespaces in Convex: Clerk members (existing) and Whop members (`whopUsers`, keyed by verified `whopUserId`). Every progress, note, tool and ledger record belongs to exactly one member record on one surface.
 2. No `accountLinks`, no email matching, no auto-link, no explicit link flow. A matching email between a Clerk account and a Whop account is a coincidence the system ignores. AGENTS.md's "never merge by email" stands without exception.
