@@ -7,10 +7,12 @@ export function ConvexWorkspace({
   view,
   base,
   accountMenu,
+  embedded = false,
 }: {
   view: string;
   base: string;
   accountMenu?: React.ReactNode;
+  embedded?: boolean;
 }) {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const access = useQuery(api.access.mine, isAuthenticated ? {} : "skip");
@@ -26,7 +28,15 @@ export function ConvexWorkspace({
       </main>
     );
   if (!isAuthenticated)
-    return (
+    return embedded ? (
+      <main id="main" className="wrap setup-page">
+        <h1>Let’s reconnect your workspace.</h1>
+        <p>
+          Your Whop session could not be verified. Reopen IntentField from
+          your Whop sidebar to continue.
+        </p>
+      </main>
+    ) : (
       <main id="main" className="wrap setup-page">
         <h1>Let’s reconnect your account.</h1>
         <p>Your session could not be verified.</p>
@@ -48,6 +58,7 @@ export function ConvexWorkspace({
       access={access}
       snapshot={snapshot}
       library={library}
+      embedded={embedded}
     />
   );
 }

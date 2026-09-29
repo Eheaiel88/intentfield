@@ -5,6 +5,12 @@ export const sku = v.union(
   v.literal("course"),
   v.literal("audio"),
 );
+export const audioVoice = v.union(v.literal("male"), v.literal("female"));
+const audioVariant = v.object({
+  voice: audioVoice,
+  storageId: v.id("_storage"),
+  fileName: v.string(),
+});
 export const answers = v.object({
   stability: v.string(),
   experiences: v.string(),
@@ -50,6 +56,7 @@ export default defineSchema({
     revision: v.number(),
     storageId: v.optional(v.id("_storage")),
     fileName: v.optional(v.string()),
+    audioVariants: v.optional(v.array(audioVariant)),
     updatedAt: v.number(),
   }).index("by_key", ["key"]),
   grants: defineTable({

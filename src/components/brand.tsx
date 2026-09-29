@@ -11,9 +11,9 @@ export function BrandWordmark() {
     />
   );
 }
-export function Brand() {
+export function Brand({ href = "/" }: { href?: string }) {
   return (
-    <Link className="brand" href="/" aria-label="IntentField home">
+    <Link className="brand" href={href} aria-label="IntentField home">
       <BrandWordmark />
     </Link>
   );

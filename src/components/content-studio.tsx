@@ -2,7 +2,13 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { isBookDownload, isBookChapter, type ContentBody } from "@/lib/content";
+import {
+  isBookDownload,
+  isBookChapter,
+  type ContentBody,
+  type AudioVoice,
+  type AudioVariant,
+} from "@/lib/content";
 import type { Id } from "../../convex/_generated/dataModel";
 export function ContentStudio() {
   const items = useQuery(api.content.ownerList, {});
@@ -62,6 +68,7 @@ type Item = {
   draft?: ContentBody;
   revision: number;
   fileName?: string;
+  audioVariants?: AudioVariant[];
 };
 function ContentEditor({
   item,
@@ -81,6 +88,12 @@ function ContentEditor({
   const dirty =
     JSON.stringify(body) !== JSON.stringify(item.draft ?? item.body);
   const [file, setFile] = useState<File | null>(null);
+  const [voice, setVoice] = useState<AudioVoice | "original">("male");
+  const isAudio = item.key.startsWith("audio/");
+  const selectedVoice = isAudio && voice !== "original" ? voice : undefined;
+  const currentFile = selectedVoice
+    ? item.audioVariants?.find((file) => file.voice === selectedVoice)?.fileName
+    : item.fileName;
   useEffect(() => {
     onDirty(dirty);
     if (!dirty) return;
@@ -222,12 +235,31 @@ function ContentEditor({
               ? "Published PDF"
               : "Finished audio recording"}
           </h2>
+          {isAudio && (
+            <label className="field">
+              <span>Recording voice</span>
+              <select
+                value={voice}
+                disabled={busy}
+                onChange={(e) => {
+                  setVoice(e.target.value as typeof voice);
+                  setFile(null);
+                }}
+              >
+                <option value="male">Male voice</option>
+                <option value="female">Female voice</option>
+                {item.fileName && (
+                  <option value="original">Original recording</option>
+                )}
+              </select>
+            </label>
+          )}
           <p>
-            {item.fileName
-              ? `Current file: ${item.fileName}`
-              : "No production file published yet."}
+            {currentFile
+              ? `Current file: ${currentFile}`
+              : "No file published for this selection yet."}
           </p>
-          {item.fileName && (
+          {currentFile && (
             <button
               className="text-link"
               onClick={() => {
@@ -241,6 +273,7 @@ function ContentEditor({
                       remove({
                         key: item.key,
                         expectedRevision: item.revision,
+                        ...(selectedVoice ? { voice: selectedVoice } : {}),
                       }),
                     "File removed from the library.",
                   );
@@ -250,8 +283,10 @@ function ContentEditor({
             </button>
           )}
           <p>
-            Uploading and publishing replaces the file members open. Keep the
-            original locally. Maximum file size: 250 MB.
+            {isAudio
+              ? "Uploading replaces only the selected voice. The other voice and shared transcript stay available."
+              : "Uploading replaces the file members open."}{" "}
+            Keep the original locally. Maximum file size: 250 MB.
           </p>
           <label className="field">
             <span>
@@ -260,6 +295,7 @@ function ContentEditor({
                 : "Choose an audio file"}
             </span>
             <input
+              key={voice}
               type="file"
               accept={
                 item.key.startsWith("book") ? "application/pdf" : "audio/*"
@@ -291,6 +327,7 @@ function ContentEditor({
                   storageId,
                   fileName: file.name,
                   expectedRevision: item.revision,
+                  ...(selectedVoice ? { voice: selectedVoice } : {}),
                 });
               }, "File published.")
             }

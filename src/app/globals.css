@@ -3607,3 +3607,5 @@ audio { width:100%; margin:24px 0; }
 }
 .book-contents { margin: 2rem 0 3rem; }
 .book-contents .lesson-row h3 { overflow-wrap: anywhere; }
+.audio-player { margin: 2rem 0; }
+.audio-player .field { max-width: 28rem; }

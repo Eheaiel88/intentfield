@@ -1,6 +1,6 @@
 import { query, mutation, internalMutation } from "./_generated/server";
 import { v, ConvexError } from "convex/values";
-import { contentBody, sku } from "./schema";
+import { contentBody, sku, audioVoice } from "./schema";
 import { identity, hasProduct, requireProduct, requireOwner } from "./access";
 import type { ContentBody, Product } from "../src/lib/content";
 import {
@@ -51,19 +51,22 @@ export const library = query({
     const all = await ctx.db.query("content").collect();
     return all
       .filter((c) => allowed.has(c.sku))
-      .map(({ key, sku, body, revision, storageId, fileName }) => ({
-        key,
-        sku,
-        body,
-        revision,
-        storageId,
-        fileName,
-      }));
+      .map(
+        ({ key, sku, body, revision, storageId, fileName, audioVariants }) => ({
+          key,
+          sku,
+          body,
+          revision,
+          storageId,
+          fileName,
+          audioVariants,
+        }),
+      );
   },
 });
 export const media = query({
-  args: { key: v.string() },
-  handler: async (ctx, { key }) => {
+  args: { key: v.string(), voice: v.optional(audioVoice) },
+  handler: async (ctx, { key, voice }) => {
     const item = await ctx.db
       .query("content")
       .withIndex("by_key", (q) => q.eq("key", key))
@@ -73,10 +76,15 @@ export const media = query({
       return null;
     }
     await requireProduct(ctx, item.sku);
-    return item.storageId
+    if (voice && item.sku !== "audio")
+      throw new ConvexError("Voice choices apply to audio only.");
+    const file = voice
+      ? item.audioVariants?.find((file) => file.voice === voice)
+      : item;
+    return file?.storageId
       ? {
-          url: await ctx.storage.getUrl(item.storageId),
-          fileName: item.fileName,
+          url: await ctx.storage.getUrl(file.storageId),
+          fileName: file.fileName,
         }
       : null;
   },
@@ -143,6 +151,7 @@ export const attachMedia = mutation({
     storageId: v.id("_storage"),
     fileName: v.string(),
     expectedRevision: v.number(),
+    voice: v.optional(audioVoice),
   },
   handler: async (ctx, args) => {
     await requireOwner(ctx);
@@ -157,6 +166,8 @@ export const attachMedia = mutation({
       item.revision !== args.expectedRevision
     )
       throw new ConvexError("Reload this media entry before uploading.");
+    if (args.voice && item.sku !== "audio")
+      throw new ConvexError("Voice choices apply to audio only.");
     const meta = await ctx.db.system.get(args.storageId);
     if (
       !meta ||
@@ -177,8 +188,20 @@ export const attachMedia = mutation({
         "Choose a PDF for the book or a supported audio file, up to 250 MB.",
       );
     await ctx.db.patch(item._id, {
-      storageId: args.storageId,
-      fileName: args.fileName.slice(0, 200),
+      ...(args.voice
+        ? {
+            audioVariants: [
+              ...(item.audioVariants ?? []).filter(
+                (file) => file.voice !== args.voice,
+              ),
+              {
+                voice: args.voice,
+                storageId: args.storageId,
+                fileName: args.fileName.slice(0, 200),
+              },
+            ],
+          }
+        : { storageId: args.storageId, fileName: args.fileName.slice(0, 200) }),
       revision: item.revision + 1,
       updatedAt: Date.now(),
     });
@@ -220,7 +243,11 @@ export const setOwner = internalMutation({
   },
 });
 export const removeMedia = mutation({
-  args: { key: v.string(), expectedRevision: v.number() },
+  args: {
+    key: v.string(),
+    expectedRevision: v.number(),
+    voice: v.optional(audioVoice),
+  },
   handler: async (ctx, args) => {
     await requireOwner(ctx);
     const item = await ctx.db
@@ -231,9 +258,16 @@ export const removeMedia = mutation({
       throw new ConvexError(
         "This media entry changed. Reload before removing the file.",
       );
+    if (args.voice && item.sku !== "audio")
+      throw new ConvexError("Voice choices apply to audio only.");
     await ctx.db.patch(item._id, {
-      storageId: undefined,
-      fileName: undefined,
+      ...(args.voice
+        ? {
+            audioVariants: (item.audioVariants ?? []).filter(
+              (file) => file.voice !== args.voice,
+            ),
+          }
+        : { storageId: undefined, fileName: undefined }),
       revision: item.revision + 1,
       updatedAt: Date.now(),
     });

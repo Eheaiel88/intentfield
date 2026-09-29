@@ -9,12 +9,14 @@ import { SavedForm, type Field } from "./saved-form";
 import { ContentStudio } from "./content-studio";
 import { LessonGuide } from "./lesson-guide";
 import { ProductLibrary } from "./product-library";
+import { AudioPlayer } from "./audio-player";
 import type { ContentItem, Note } from "@/lib/content";
 import {
   profileDomains,
   isBookChapter,
   isBookWorksheet,
   isBookDownload,
+  hasAudioRecording,
 } from "@/lib/content";
 import outline from "@/lib/course-outline.json";
 import book from "@/lib/book-sample.json";
@@ -95,6 +97,7 @@ export function FullWorkspace({
   access,
   snapshot,
   library,
+  embedded = false,
 }: {
   view: string;
   base: string;
@@ -102,6 +105,9 @@ export function FullWorkspace({
   access: Access;
   snapshot: { notes: Note[]; lessons: Lesson[] };
   library: ContentItem[];
+  // Inside Whop's iframe: keep the buyer in the member area and hide
+  // website-only destinations.
+  embedded?: boolean;
 }) {
   const router = useRouter();
   const saveNote = useMutation(api.workspace.saveNote);
@@ -164,9 +170,11 @@ export function FullWorkspace({
           are ready below.
         </p>
         <ButtonLink href={href("purchases")}>View my products</ButtonLink>
-        <ButtonLink className="text-link" href="/sample">
-          Read the book sample
-        </ButtonLink>
+        {!embedded && (
+          <ButtonLink className="text-link" href="/sample">
+            Read the book sample
+          </ButtonLink>
+        )}
       </>
     );
   else if (view === "today")
@@ -763,7 +771,7 @@ export function FullWorkspace({
             <ButtonLink className="text-link" href={href("audio")}>
               All audio practices
             </ButtonLink>
-            <Media item={selected} />
+            <AudioPlayer key={selected.key} item={selected} />
             <article className="audio-script panel">
               {selected.body.paragraphs.map((p, i) =>
                 p.startsWith("[Pause") ? (
@@ -796,13 +804,15 @@ export function FullWorkspace({
                     href={href(`audio/${m}`)}
                     className="button quiet"
                   >
-                    {c?.storageId
+                    {hasAudioRecording(c)
                       ? "Open the audio practice"
                       : "Read the pilot script"}
                   </ButtonLink>
                   <span className="micro">
-                    {c?.storageId
-                      ? "RECORDING AVAILABLE"
+                    {hasAudioRecording(c)
+                      ? c?.audioVariants?.length === 2
+                        ? "MALE & FEMALE VOICES AVAILABLE"
+                        : "RECORDING AVAILABLE"
                       : "SCRIPT READY / RECORDING TO COME"}
                   </span>
                 </article>
@@ -831,8 +841,8 @@ export function FullWorkspace({
           access={access}
           bookPublished={Boolean(item("book")?.storageId)}
           recordingCount={
-            ["audio/morning", "audio/evening"].filter(
-              (key) => item(key)?.storageId,
+            ["audio/morning", "audio/evening"].filter((key) =>
+              hasAudioRecording(item(key)),
             ).length
           }
           nextLesson={next}
@@ -869,6 +879,7 @@ export function FullWorkspace({
       }
       accountMenu={accountMenu}
       owner={access.owner}
+      embedded={embedded}
     >
       {content}
     </MemberShell>

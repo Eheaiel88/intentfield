@@ -1,4 +1,13 @@
 export type Product = "book" | "course" | "audio";
+export type AudioVoice = "male" | "female";
+export type AudioVariant = {
+  voice: AudioVoice;
+  storageId: string;
+  fileName: string;
+};
+export const hasAudioRecording = (
+  item?: Pick<ContentItem, "storageId" | "audioVariants">,
+) => Boolean(item?.storageId || item?.audioVariants?.length);
 export const isBookChapter = (key: string) =>
   /^book\/chapter\/[1-8]$/.test(key);
 export const isBookWorksheet = (key: string) =>
@@ -24,6 +33,7 @@ export type ContentItem = {
   revision: number;
   storageId?: string;
   fileName?: string;
+  audioVariants?: AudioVariant[];
 };
 export type Note = {
   key: string;

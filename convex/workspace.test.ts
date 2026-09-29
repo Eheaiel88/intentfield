@@ -198,6 +198,125 @@ test("book companion downloads require PDF media, owner publication and current 
     "Book and workbook",
   );
 });
+test("audio voice files remain independently replaceable and require audio access", async () => {
+  const t = setup();
+  await t.mutation(internal.content.seed, {
+    items: [
+      {
+        key: "audio/morning",
+        sku: "audio",
+        body: { ...emptyBody(), title: "Morning" },
+      },
+      { key: "book", sku: "book", body: { ...emptyBody(), title: "Book" } },
+    ],
+  });
+  await grant(t, "audio");
+  await grant(t, "book", bob.tokenIdentifier);
+  const a = t.withIdentity(alice);
+  const b = t.withIdentity(bob);
+  async function file(type: string) {
+    return await t.run(async (ctx) => {
+      const id = await ctx.storage.store(new Blob(["fixture"], { type }));
+      // convex-test omits real upload MIME metadata from its storage fixture.
+      // @ts-expect-error Test-only system table fixture.
+      await ctx.db.patch(id, { contentType: type });
+      return id;
+    });
+  }
+  const male = await file("audio/mpeg");
+  const female = await file("audio/mpeg");
+  const pdf = await file("application/pdf");
+  const args = {
+    key: "audio/morning",
+    voice: "male" as const,
+    storageId: male,
+    fileName: "male.mp3",
+    expectedRevision: 1,
+  };
+  await expect(a.mutation(api.content.attachMedia, args)).rejects.toThrow(
+    "Owner",
+  );
+  await t.mutation(internal.content.setOwner, {
+    principal: alice.tokenIdentifier,
+  });
+  await expect(
+    a.mutation(api.content.attachMedia, { ...args, storageId: pdf }),
+  ).rejects.toThrow("supported audio");
+  await expect(
+    a.mutation(api.content.attachMedia, { ...args, key: "book" }),
+  ).rejects.toThrow("audio only");
+  await a.mutation(api.content.attachMedia, args);
+  expect(
+    await a.query(api.content.media, { key: args.key, voice: "female" }),
+  ).toBeNull();
+  await a.mutation(api.content.attachMedia, {
+    ...args,
+    voice: "female",
+    storageId: female,
+    fileName: "female.mp3",
+    expectedRevision: 2,
+  });
+  const femaleMedia = await a.query(api.content.media, {
+    key: args.key,
+    voice: "female",
+  });
+  expect(femaleMedia?.fileName).toBe("female.mp3");
+  await expect(
+    b.query(api.content.media, { key: args.key, voice: "female" }),
+  ).rejects.toThrow("access");
+  await expect(a.mutation(api.content.attachMedia, args)).rejects.toThrow(
+    "Reload",
+  );
+  await a.mutation(api.content.attachMedia, {
+    ...args,
+    fileName: "male-revised.mp3",
+    expectedRevision: 3,
+  });
+  expect(
+    await a.query(api.content.media, { key: args.key, voice: "female" }),
+  ).toEqual(femaleMedia);
+  expect(
+    (await a.query(api.content.library, {}))[0].audioVariants,
+  ).toHaveLength(2);
+  await a.mutation(api.content.removeMedia, {
+    key: args.key,
+    voice: "female",
+    expectedRevision: 4,
+  });
+  expect(
+    await a.query(api.content.media, { key: args.key, voice: "female" }),
+  ).toBeNull();
+  expect(
+    (await a.query(api.content.media, { key: args.key, voice: "male" }))
+      ?.fileName,
+  ).toBe("male-revised.mp3");
+  await a.mutation(api.content.attachMedia, {
+    key: args.key,
+    storageId: female,
+    fileName: "original.mp3",
+    expectedRevision: 5,
+  });
+  expect((await a.query(api.content.media, { key: args.key }))?.fileName).toBe(
+    "original.mp3",
+  );
+  await a.mutation(api.content.removeMedia, {
+    key: args.key,
+    expectedRevision: 6,
+  });
+  expect(
+    (await a.query(api.content.media, { key: args.key, voice: "male" }))
+      ?.fileName,
+  ).toBe("male-revised.mp3");
+  await t.mutation(internal.grants.applyVerified, {
+    principal: alice.tokenIdentifier,
+    sku: "audio",
+    source: alice.tokenIdentifier + "audio",
+    active: false,
+  });
+  await expect(
+    a.query(api.content.media, { key: args.key, voice: "male" }),
+  ).rejects.toThrow("access");
+});
 test("self-image preserves zero and skipped answers, validates ratings; any lesson persists with correct completion", async () => {
   const t = setup();
   await grant(t, "course");

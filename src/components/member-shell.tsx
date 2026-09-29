@@ -11,6 +11,7 @@ export function MemberShell({
   review = false,
   accountMenu,
   owner = false,
+  embedded = false,
 }: {
   base: string;
   active: string;
@@ -19,8 +20,12 @@ export function MemberShell({
   review?: boolean;
   accountMenu?: React.ReactNode;
   owner?: boolean;
+  embedded?: boolean;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  // Inside Whop, the wordmark stays inside the member area instead of
+  // leaving for the website landing page.
+  const brandHref = embedded ? `${base}/today` : "/";
   const links = (items: string[][]) =>
     items.map(([id, icon, name]) => (
       <Link
@@ -84,7 +89,7 @@ export function MemberShell({
       )}
       <div className="app-layout">
         <aside className="sidebar">
-          <Brand />
+          <Brand href={brandHref} />
           <p className="nav-label">PROSPERITY 30 / YOUR SPACE</p>
           {nav}
         </aside>
@@ -120,7 +125,7 @@ export function MemberShell({
       </div>
       <dialog ref={dialog} className="mobile-menu-panel">
         <div className="dialog-head">
-          <Brand />
+          <Brand href={brandHref} />
           <button
             className="icon-button"
             aria-label="Close navigation"

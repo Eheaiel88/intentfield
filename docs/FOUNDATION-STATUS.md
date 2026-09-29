@@ -66,6 +66,10 @@ The comprehensive Clerk/Convex browser scenario passes locally: signed-out redir
 
 Owner content draft/publication and real PDF/audio upload, delivery/playback and removal passed browser checks both locally and on Vercel. The complete member scenario also passed against the protected Vercel deployment; `/dev/review/today` returned 404 there. A fresh browser context on this machine is not a test on a second physical device.
 
+## Whop surface identity — September 29, 2026
+
+The embedded identity adapter from docs/WHOP-INTEGRATION-PLAN.md Phase 1 is implemented: server-side `x-whop-user-token` verification (jose, Whop's published ES256 key and contract), a `/api/whop/token` exchange that mints 15-minute Convex identity tokens signed by `WHOP_CONVEX_SIGNING_KEY`, a second Convex `customJwt` provider (`WHOP_CONVEX_JWKS` env, set on the dev deployment), and `/experiences/[experienceId]/…` rendering the member workspace in embedded mode. Whop-surface principals (`https://myintentfield.com/whop|user_…`) are a separate account namespace from Clerk by design — no linking, even on a matching email. Verified by unit tests, an end-to-end local exchange, and the existing suite; an in-Whop test still requires deploy plus attaching the app experience to a product. Purchases, webhooks and checkout remain later phases.
+
 ## Commercial release work
 
 1. Record and listen-review the morning/evening audio, then publish through Content Studio. The complete book, workbook, checklist and written course are available for owner review now.

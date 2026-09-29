@@ -12,7 +12,7 @@
 - Local /dev/review routes must return 404 in production. They are browser-only review storage, not verified member sessions or cloud persistence.
 - The public sample sales funnel is `/checkout` → `/checkout/course` → `/checkout/audio` → `/checkout/complete`. URL selections are display-only: never use them to grant access, create orders, or claim payment. Keep the simulation labels, optional declines and restart path.
 - Run npm run typecheck, npm run lint, npm test and npm run build for application/backend changes. Verify responsive UI against the accepted preview.
-- Website sign-in uses Clerk; its development integration is configured. Whop identity is a separate adapter and remains pending. Never add a bypass to unblock member access.
+- Website sign-in uses Clerk; its development integration is configured. The Whop embedded surface authenticates by verifying `x-whop-user-token` server-side and exchanging it for a short-lived Convex token (`src/lib/whop-auth.ts`); Whop principals are a separate account namespace from Clerk — never link or merge the two, even on a matching email. Never add a bypass to unblock member access.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
