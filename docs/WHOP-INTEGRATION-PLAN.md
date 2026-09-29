@@ -101,12 +101,13 @@ As built (one design change from the sketch):
 
 Verified: nonce lifecycle tests (auth required, single-use, product-bound, cross-payment reuse and forged values rejected, refund revokes both surface grants); 44 tests green; typecheck/lint/build clean. Remaining to accept: the live "done means" purchases — real $19 → book only; +$79 → course; +$29 → audio; same Clerk account sees them; a Whop account on the same email sees none — which require the deployed site and a real card.
 
-## Phase 5 — Whop storefront surface
+## Phase 5 — Whop storefront surface — CONFIGURED 30 Sep 2026, blocked on one dashboard click
 
-1. Attach the app as the experience on all three products (prior API attempt failed on `app_authorization:create`; do it from the dashboard if the API still refuses).
-2. Product pages: accurate descriptions, cover art (already uploaded), delivery statement ("digital access in the IntentField app inside Whop"), access term, refund policy. No income claims.
-3. Flip products from hidden → visible only after Phase 1–4 acceptance passes.
-4. Test purchase through the Whop product page → open IntentField in the Whop sidebar → correct items unlocked (done-means #3).
+1. **Blocked on app authorization:** creating the app's experience still fails with `app_authorization:create` — the owner must add the IntentField app to the whop from the dashboard once (this also activates the app API key's four requested permissions). After that, create the experience and attach it to all three products via `experiences_create`/`experiences_attach`.
+2. Product pages done: truthful descriptions with delivery statement ("delivered in the IntentField app right inside Whop") and the 12-month access term on all three; the audio product and plan copy corrected to say written practices now, recordings added to the same product when finished (none are produced yet). Covers were already uploaded; the new Field + Horizon mark is the app icon and business logo.
+3. Plans aligned with the published term: `expiration_days = 365` set on all three (previously indefinite, which also conflicted with Whop Seller Terms); checkout styling set to graphite `#101312` / electric `#D5FF52`. A Whop membership now expires in step with our own grant's `validUntil`; the `membership.deactivated` event at expiry is deliberately unhandled (our grants expire independently).
+4. Products remain **hidden** by owner decision until the full live acceptance run; the visibility flip is the last step.
+5. Live test purchase through the Whop product page → IntentField in the sidebar (done-means #3) runs with the rest of the deferred live tests.
 
 ## Phase 6 — Whop pixel
 
