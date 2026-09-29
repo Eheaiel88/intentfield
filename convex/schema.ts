@@ -95,10 +95,25 @@ export default defineSchema({
     currency: v.string(),
     paidAt: v.number(),
     checkoutNonce: v.optional(v.string()),
+    // The website member this purchase also entitles, resolved once from
+    // the checkout nonce when the payment webhook arrives.
+    sitePrincipal: v.optional(v.string()),
     updatedAt: v.number(),
   })
     .index("by_payment", ["paymentId"])
     .index("by_whop_user", ["whopUserId"]),
+  // Single-use, expiring references minted for a signed-in website member
+  // at checkout time and carried through Whop payment metadata. They tie a
+  // verified payment to the member who was at the keyboard — never trusted
+  // from return URLs, and only ever granting to the principal that minted
+  // them.
+  checkoutNonces: defineTable({
+    nonce: v.string(),
+    principal: v.string(),
+    sku,
+    createdAt: v.number(),
+    usedByPaymentId: v.optional(v.string()),
+  }).index("by_nonce", ["nonce"]),
   // Every webhook delivery id is recorded before its effects are applied,
   // in the same transaction; a redelivered event changes nothing twice.
   webhookDeliveries: defineTable({

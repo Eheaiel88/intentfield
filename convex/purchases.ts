@@ -1,11 +1,7 @@
 import { internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { applyGrant } from "./grants";
-import {
-  PURCHASE_ACCESS_DAYS,
-  skuForPlan,
-  whopCatalog,
-} from "../src/lib/whop-catalog";
+import { PURCHASE_ACCESS_DAYS, skuForPlan } from "../src/lib/whop-catalog";
 import { whopSurfacePrincipal } from "../src/lib/whop-surface";
 
 // Applies one verified Whop webhook delivery. The HTTP action has already
@@ -15,6 +11,12 @@ import { whopSurfacePrincipal } from "../src/lib/whop-surface";
 // not-yet-actionable events are recorded and ignored (returning success),
 // so Whop does not retry forever; reconciliation reviews `ignored:` rows.
 const ACCESS_MS = PURCHASE_ACCESS_DAYS * 24 * 60 * 60 * 1000;
+
+// A checkout nonce is honored for one day after minting: long enough for a
+// slow checkout or delayed webhook, short enough that a leaked stale value
+// is worthless. The grant it routes still requires the signed webhook.
+const NONCE_VALID_MS = 24 * 60 * 60 * 1000;
+export const SITE_GRANT_SUFFIX = ":site";
 
 type PurchaseStatus = "settled" | "refunded" | "disputed";
 
@@ -84,7 +86,12 @@ async function applyPayment(
   // A late success delivery never reopens a refunded or disputed purchase.
   const status: PurchaseStatus =
     existing && existing.status !== "settled" ? existing.status : "settled";
-  const nonce = payment?.metadata?.checkout_nonce;
+  const rawNonce = payment?.metadata?.checkout_nonce;
+  const nonce =
+    typeof rawNonce === "string" ? rawNonce : existing?.checkoutNonce;
+  const sitePrincipal =
+    existing?.sitePrincipal ??
+    (nonce ? await resolveNonce(ctx, nonce, paymentId, sku) : undefined);
   const row = {
     paymentId,
     whopUserId,
@@ -96,7 +103,8 @@ async function applyPayment(
     amount: typeof payment?.total === "number" ? payment.total : 0,
     currency: typeof payment?.currency === "string" ? payment.currency : "usd",
     paidAt,
-    checkoutNonce: typeof nonce === "string" ? nonce : existing?.checkoutNonce,
+    checkoutNonce: nonce,
+    sitePrincipal,
     updatedAt: Date.now(),
   };
   if (existing) await ctx.db.replace(existing._id, row);
@@ -108,7 +116,39 @@ async function applyPayment(
     active: status === "settled",
     validUntil: paidAt + ACCESS_MS,
   });
+  if (sitePrincipal)
+    await applyGrant(ctx, {
+      principal: sitePrincipal,
+      sku,
+      source: paymentId + SITE_GRANT_SUFFIX,
+      active: status === "settled",
+      validUntil: paidAt + ACCESS_MS,
+    });
   return existing ? "applied:payment-updated" : "applied:payment";
+}
+
+// A nonce routes a payment to the website member who minted it — only if it
+// exists in our records, matches the purchased product, is fresh, and has
+// not already been claimed by a different payment. Failing any of these,
+// the purchase still stands for the Whop account; nothing is guessed.
+async function resolveNonce(
+  ctx: Parameters<typeof applyGrant>[0],
+  nonce: string,
+  paymentId: string,
+  sku: string,
+): Promise<string | undefined> {
+  const record = await ctx.db
+    .query("checkoutNonces")
+    .withIndex("by_nonce", (q) => q.eq("nonce", nonce))
+    .unique();
+  if (!record) return undefined;
+  if (record.sku !== sku) return undefined;
+  if (record.usedByPaymentId && record.usedByPaymentId !== paymentId)
+    return undefined;
+  if (Date.now() - record.createdAt > NONCE_VALID_MS) return undefined;
+  if (!record.usedByPaymentId)
+    await ctx.db.patch(record._id, { usedByPaymentId: paymentId });
+  return record.principal;
 }
 
 async function setPurchaseStatus(
@@ -132,6 +172,15 @@ async function setPurchaseStatus(
     active: status === "settled",
     validUntil: purchase.paidAt + ACCESS_MS,
   });
+  // A status change moves both surfaces' grants for this payment together.
+  if (purchase.sitePrincipal)
+    await applyGrant(ctx, {
+      principal: purchase.sitePrincipal,
+      sku: purchase.sku,
+      source: purchase.paymentId + SITE_GRANT_SUFFIX,
+      active: status === "settled",
+      validUntil: purchase.paidAt + ACCESS_MS,
+    });
   return `applied:${status}`;
 }
 
@@ -156,10 +205,3 @@ async function applyDispute(
   const next: PurchaseStatus = status === "won" ? "settled" : "disputed";
   return setPurchaseStatus(ctx, dispute?.payment?.id, next);
 }
-
-// Deliberately unused until Phase 4: website checkouts carry a
-// server-issued nonce in payment metadata; resolving it to a Clerk member
-// adds a second grant with source `${paymentId}:site`. Recorded here so the
-// grant-source convention is fixed in one place.
-export const SITE_GRANT_SUFFIX = ":site";
-export const catalogAccountId = whopCatalog.accountId;

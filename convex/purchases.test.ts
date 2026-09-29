@@ -184,6 +184,100 @@ test("a dispute suspends access and only a won outcome restores it", async () =>
   );
 });
 
+const websiteBuyer = {
+  subject: "user_site1",
+  issuer: "https://clerk.test",
+  tokenIdentifier: "https://clerk.test|user_site1",
+};
+
+test("a checkout nonce routes the purchase to the website member who minted it", async () => {
+  const t = setup();
+  const site = t.withIdentity(websiteBuyer);
+  const nonce = await site.mutation(api.checkout.createNonce, { sku: "book" });
+  await deliver(
+    t,
+    "msg_1",
+    "payment.succeeded",
+    payment({ metadata: { checkout_nonce: nonce } }),
+  );
+  // Both surface accounts are entitled by the one payment…
+  expect((await site.query(api.access.mine, {})).book).toBe(true);
+  expect((await t.withIdentity(buyer).query(api.access.mine, {})).book).toBe(
+    true,
+  );
+  // …and a refund revokes both together.
+  await deliver(t, "msg_2", "refund.created", {
+    status: "succeeded",
+    payment: { id: "pay_1" },
+  });
+  expect((await site.query(api.access.mine, {})).book).toBe(false);
+  expect((await t.withIdentity(buyer).query(api.access.mine, {})).book).toBe(
+    false,
+  );
+});
+
+test("a nonce is single-use, product-bound and never guessed", async () => {
+  const t = setup();
+  const site = t.withIdentity(websiteBuyer);
+  await expect(
+    t.mutation(api.checkout.createNonce, { sku: "book" }),
+  ).rejects.toThrow("Sign in");
+  const bookNonce = await site.mutation(api.checkout.createNonce, {
+    sku: "book",
+  });
+  // Wrong product: the payment stands, the site grant is not created.
+  await deliver(
+    t,
+    "msg_1",
+    "payment.succeeded",
+    payment({
+      id: "pay_audio",
+      plan: { id: whopCatalog.products.audio.planId },
+      metadata: { checkout_nonce: bookNonce },
+    }),
+  );
+  expect((await site.query(api.access.mine, {})).audio).toBe(false);
+  // Right product claims it; a different later payment cannot reuse it.
+  await deliver(
+    t,
+    "msg_2",
+    "payment.succeeded",
+    payment({ metadata: { checkout_nonce: bookNonce } }),
+  );
+  expect((await site.query(api.access.mine, {})).book).toBe(true);
+  await deliver(
+    t,
+    "msg_3",
+    "payment.succeeded",
+    payment({
+      id: "pay_other",
+      user: { id: "user_STRANGER" },
+      metadata: { checkout_nonce: bookNonce },
+    }),
+  );
+  const strangerGrantForSite = await t.run(async (ctx) =>
+    ctx.db
+      .query("grants")
+      .withIndex("by_source", (q) => q.eq("source", "pay_other:site"))
+      .unique(),
+  );
+  expect(strangerGrantForSite).toBeNull();
+  // An unknown nonce grants nothing on the website side.
+  await deliver(
+    t,
+    "msg_4",
+    "payment.succeeded",
+    payment({ id: "pay_forged", metadata: { checkout_nonce: "made-up" } }),
+  );
+  const forgedSiteGrant = await t.run(async (ctx) =>
+    ctx.db
+      .query("grants")
+      .withIndex("by_source", (q) => q.eq("source", "pay_forged:site"))
+      .unique(),
+  );
+  expect(forgedSiteGrant).toBeNull();
+});
+
 test("the HTTP receiver rejects bad signatures and applies signed deliveries once", async () => {
   process.env.WHOP_WEBHOOK_SECRET = "ws_test_secret";
   const t = setup();

@@ -1,33 +1,33 @@
+"use client";
 import Link from "next/link";
+import { useConvexAuth, useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { Arrow, BookObject, BrandWordmark, ButtonLink, stages } from "./brand";
 import { DailyRhythmArt } from "./product-library";
+import { MemberProvider } from "./member-provider";
 import { PublicShell } from "./public-shell";
-import {
-  previewHref,
-  previewTotal,
-  type PreviewSelection,
-  type PreviewStep,
-} from "@/lib/sales-walkthrough";
+import { PurchasePanel } from "./purchase-panel";
 
-const steps: [PreviewStep, string][] = [
-  ["book", "Book"],
-  ["course", "Course option"],
-  ["audio", "Audio option"],
-  ["complete", "Your selection"],
+// The real sales flow: book checkout, two optional one-time add-on offers,
+// then the buyer's actual products. Each step is a separate single-plan
+// Whop checkout; declining simply moves forward. Access shown anywhere in
+// this flow comes from verified grants, never from URL state — the
+// `confirming` query value only chooses status wording.
+export type CheckoutStep = "book" | "course" | "audio" | "complete";
+
+const steps: [CheckoutStep, string, string][] = [
+  ["book", "Book", "/checkout"],
+  ["course", "Course option", "/checkout/course"],
+  ["audio", "Audio option", "/checkout/audio"],
+  ["complete", "Your products", "/checkout/complete"],
 ];
 
-function Progress({
-  step,
-  selection,
-}: {
-  step: PreviewStep;
-  selection: PreviewSelection;
-}) {
+function Progress({ step }: { step: CheckoutStep }) {
   const current = steps.findIndex(([id]) => id === step);
   return (
-    <nav aria-label="Sales walkthrough">
+    <nav aria-label="Checkout progress">
       <ol className="purchase-progress">
-        {steps.map(([id, label], index) => (
+        {steps.map(([id, label, href], index) => (
           <li
             key={id}
             className={
@@ -36,39 +36,11 @@ function Progress({
             aria-current={index === current ? "step" : undefined}
           >
             <span aria-hidden="true">{index < current ? "✓" : index + 1}</span>
-            {index < current ? (
-              <Link href={previewHref(id, selection)}>{label}</Link>
-            ) : (
-              label
-            )}
+            {index < current ? <Link href={href}>{label}</Link> : label}
           </li>
         ))}
       </ol>
     </nav>
-  );
-}
-
-function OrderSummary() {
-  return (
-    <aside className="order-summary">
-      <p className="eyebrow">YOUR SAMPLE SELECTION</p>
-      <h3>A stronger foundation.</h3>
-      <div className="order-row">
-        <span>Book + workbook</span>
-        <b>$19</b>
-      </div>
-      <div className="order-total">
-        <span>Preview total</span>
-        <strong>$19</strong>
-      </div>
-      <p className="micro">
-        USD, before applicable tax. This is a simulated purchase.
-      </p>
-      <p className="micro">
-        Next: choose whether to add the $79 course and the $29 audio companion.
-        Both are optional, one-time offers.
-      </p>
-    </aside>
   );
 }
 
@@ -98,36 +70,37 @@ function BookCheckout() {
               <br />
               Worked examples + action checklist
             </p>
-            <span className="pill">ONE-TIME PURCHASE</span>
+            <span className="pill">ONE-TIME PURCHASE · $19</span>
           </div>
         </div>
-        <div className="preview-payment">
-          <span className="lock-icon" aria-hidden="true">
-            ◇
-          </span>
-          <div>
-            <strong>Preview checkout</strong>
-            <p>
-              No payment details are needed. Continue to see the two optional
-              offers and your final selection page.
-            </p>
-          </div>
-        </div>
-        <ButtonLink
-          href={previewHref("course", { course: false, audio: false })}
-          className="button primary full"
-        >
-          Simulate $19 book purchase
-        </ButtonLink>
+        <PurchasePanel sku="book" cta="Buy the book · $19" nextHref="/checkout/course" />
         <p className="micro">
-          This sample does not process a payment. The complete seven-day book
-          and workbook are available in the member application with book access.
+          12 months of online access from purchase. Your book opens in the
+          member application with the account you are signed in to now.
         </p>
         <ButtonLink href="/sample" className="text-link">
-          Read the opening sample
+          Read the opening sample first
         </ButtonLink>
       </section>
-      <OrderSummary />
+      <aside className="order-summary">
+        <p className="eyebrow">YOUR ORDER</p>
+        <h3>A stronger foundation.</h3>
+        <div className="order-row">
+          <span>Book + workbook</span>
+          <b>$19</b>
+        </div>
+        <div className="order-total">
+          <span>Due today</span>
+          <strong>$19</strong>
+        </div>
+        <p className="micro">
+          USD, before applicable tax. Payments are processed by Whop.
+        </p>
+        <p className="micro">
+          Next: choose whether to add the $79 course and the $29 audio
+          companion. Both are optional, one-time offers.
+        </p>
+      </aside>
     </div>
   );
 }
@@ -212,33 +185,23 @@ function CourseOffer() {
           <strong>
             $79 <small>additional · one time</small>
           </strong>
-          <p>
-            Your book: $19. With this upgrade: <b>$98</b> before applicable tax.
-          </p>
-          <ButtonLink
-            href={previewHref("audio", { course: true, audio: false })}
-            className="button primary full"
-          >
-            Add Prosperity 30 · $79
-          </ButtonLink>
-          <Link
-            href={previewHref("audio", { course: false, audio: false })}
-            className="decline"
-          >
+          <p>A separate one-time payment, 12 months of online access.</p>
+          <PurchasePanel
+            sku="course"
+            cta="Add Prosperity 30 · $79"
+            nextHref="/checkout/audio"
+            deferred
+          />
+          <Link href="/checkout/audio" className="decline">
             Continue with my book
           </Link>
-          <span className="micro">
-            Sample selection. No charge or product access is created.
-          </span>
         </div>
       </aside>
     </div>
   );
 }
 
-function AudioOffer({ selection }: { selection: PreviewSelection }) {
-  const beforeAudio = { ...selection, audio: false };
-  const withAudio = { ...selection, audio: true };
+function AudioOffer() {
   return (
     <div className="upgrade-grid">
       <section>
@@ -254,8 +217,7 @@ function AudioOffer({ selection }: { selection: PreviewSelection }) {
           for the life you are building.
         </p>
         <p className="muted">
-          Add guided affirmations and reflection to{" "}
-          {selection.course ? "your book and course" : "your book"}. Let a voice
+          Add guided affirmations and reflection to your practice. Let a voice
           carry you through desire, imagination, alignment and receiving.
         </p>
         <div className="audio-offer-cards">
@@ -292,7 +254,9 @@ function AudioOffer({ selection }: { selection: PreviewSelection }) {
         </div>
         <p className="micro">
           Designed to work with the book on its own. The written exercises
-          remain complete without audio.
+          remain complete without audio. Two written pilot scripts are
+          available today; finished recordings are still to come and will be
+          added to the same product.
         </p>
       </section>
       <aside className="audio-upgrade-aside">
@@ -313,80 +277,78 @@ function AudioOffer({ selection }: { selection: PreviewSelection }) {
           <strong>
             $29 <small>additional · one time</small>
           </strong>
-          <p>
-            Your selection so far: ${previewTotal(beforeAudio)}.<br />
-            With audio: <b>${previewTotal(withAudio)}</b> before applicable tax.
-          </p>
-          <ButtonLink
-            href={previewHref("complete", withAudio)}
-            className="button primary full"
-          >
-            Add the audio companion · $29
-          </ButtonLink>
-          <Link href={previewHref("complete", beforeAudio)} className="decline">
+          <p>A separate one-time payment, 12 months of online access.</p>
+          <PurchasePanel
+            sku="audio"
+            cta="Add the audio companion · $29"
+            nextHref="/checkout/complete"
+            deferred
+          />
+          <Link href="/checkout/complete" className="decline">
             Continue without audio
           </Link>
-          <span className="micro">
-            Sample selection. Two written pilot scripts are available; finished
-            recordings are still to come.
-          </span>
         </div>
       </aside>
     </div>
   );
 }
 
-function PreviewComplete({ selection }: { selection: PreviewSelection }) {
+function ProductsSummary({ confirming }: { confirming: string | null }) {
+  const { isAuthenticated } = useConvexAuth();
+  const access = useQuery(api.access.mine, isAuthenticated ? {} : "skip");
+  if (access === undefined)
+    return (
+      <p className="micro" role="status">
+        Loading your products…
+      </p>
+    );
+  const pending = (sku: "book" | "course" | "audio") =>
+    confirming === sku && !access[sku];
+  const anything =
+    access.book || access.course || access.audio || confirming !== null;
   return (
     <>
       <div className="access-heading">
         <div>
-          <p className="eyebrow">YOUR SELECTION / PREVIEW COMPLETE</p>
+          <p className="eyebrow">YOUR PRODUCTS / INTENTFIELD</p>
           <h1 className="flow-title">
             Your next step
             <br />
             has a <span className="warm-emphasis">place to begin.</span>
           </h1>
           <p className="muted">
-            Here is what you selected in this walkthrough. Nothing has been
-            charged.
+            {anything
+              ? "Everything your account includes is below. Your receipt arrives by email from Whop."
+              : "Your account has no products yet. Begin with the book."}
           </p>
-        </div>
-        <div className="selection-total">
-          <span>SIMULATED TOTAL</span>
-          <strong>${previewTotal(selection)}</strong>
-          <small>USD, before applicable tax</small>
         </div>
       </div>
       <div className="product-library walkthrough-products">
         <div className="access-grid">
-          <article className="access-card product-card">
-            <span className="eyebrow">01 / YOUR FOUNDATION</span>
-            <div className="access-art">
-              <BookObject mini />
-            </div>
-            <h2>Book + workbook</h2>
-            <p className="product-description">
-              Begin with the person behind the plan. Read the opening chapter
-              and explore the first worksheet.
-            </p>
-            <div className="product-actions">
-              <ButtonLink href="/sample">Read the book sample</ButtonLink>
-              <a
-                href="/downloads/intentfield-book-workbook-sample.pdf"
-                className="text-link product-sample"
-                download
-              >
-                Download the sample PDF <Arrow />
-              </a>
-            </div>
-            <p className="micro product-note">
-              $19 sample selection. The opening sample is available now; the
-              full seven-day edition is available inside the member application
-              with book access.
-            </p>
-          </article>
-          {selection.course && (
+          {(access.book || pending("book")) && (
+            <article className="access-card product-card">
+              <span className="eyebrow">01 / YOUR FOUNDATION</span>
+              <div className="access-art">
+                <BookObject mini />
+              </div>
+              <h2>Book + workbook</h2>
+              <p className="product-description">
+                Begin with the person behind the plan. The complete seven-day
+                book and printable workbook.
+              </p>
+              <div className="product-actions">
+                {access.book ? (
+                  <ButtonLink href="/app/book">Open my book</ButtonLink>
+                ) : (
+                  <p className="micro" role="status">
+                    Payment received — confirming your purchase. This page
+                    updates automatically.
+                  </p>
+                )}
+              </div>
+            </article>
+          )}
+          {(access.course || pending("course")) && (
             <article className="access-card product-card course-access">
               <span className="eyebrow">02 / YOUR DAILY PRACTICE</span>
               <div className="access-art access-number" aria-hidden="true">
@@ -398,77 +360,91 @@ function PreviewComplete({ selection }: { selection: PreviewSelection }) {
                 private record of your practice.
               </p>
               <div className="product-actions">
-                <ButtonLink href="/app/today">Open member workspace</ButtonLink>
+                {access.course ? (
+                  <ButtonLink href="/app/today">
+                    Open member workspace
+                  </ButtonLink>
+                ) : (
+                  <p className="micro" role="status">
+                    Payment received — confirming your purchase. This page
+                    updates automatically.
+                  </p>
+                )}
               </div>
-              <p className="micro product-note">
-                $79 sample selection. Member sign-in and existing course access
-                are required to open the workspace.
-              </p>
             </article>
           )}
-          {selection.audio && (
+          {(access.audio || pending("audio")) && (
             <article className="access-card product-card">
-              <span className="eyebrow">
-                {selection.course ? "03" : "02"} / YOUR DAILY RHYTHM
-              </span>
+              <span className="eyebrow">03 / YOUR DAILY RHYTHM</span>
               <DailyRhythmArt />
               <h2>Morning &amp; Evening</h2>
               <p className="product-description">
-                Read the two pilot scripts and see how audio will support your
-                beginning and end of day.
+                Your morning and evening companion. Written pilot scripts now;
+                recordings arrive in the same product.
               </p>
               <div className="product-actions">
-                <ButtonLink href="/app/audio">Open audio companion</ButtonLink>
+                {access.audio ? (
+                  <ButtonLink href="/app/audio">
+                    Open audio companion
+                  </ButtonLink>
+                ) : (
+                  <p className="micro" role="status">
+                    Payment received — confirming your purchase. This page
+                    updates automatically.
+                  </p>
+                )}
               </div>
-              <p className="micro product-note">
-                $29 sample selection. Member sign-in and existing audio access
-                are required. Finished recordings are still to come.
-              </p>
             </article>
           )}
         </div>
       </div>
       <div className="walkthrough-finish">
         <div>
-          <h2>The walkthrough is complete.</h2>
+          <h2>{anything ? "You are ready to begin." : "Begin with the book."}</h2>
           <p>
-            This sample shows the sales journey. Your selections have not
-            created purchases or changed your member access.
+            {anything
+              ? "Your products stay in your account for 12 months from purchase. Add the course or audio at any time from My Products."
+              : "The Wealth Primer is the foundation the other products build on."}
           </p>
         </div>
-        <ButtonLink href="/checkout" className="button quiet">
-          Start the walkthrough again
+        <ButtonLink
+          href={anything ? "/app/today" : "/checkout"}
+          className="button quiet"
+        >
+          {anything ? "Open my workspace" : "Get the book · $19"}
         </ButtonLink>
       </div>
     </>
   );
 }
 
-export function SalesWalkthrough({
+export function CheckoutFlow({
   step,
-  selection,
+  confirming = null,
 }: {
-  step: PreviewStep;
-  selection: PreviewSelection;
+  step: CheckoutStep;
+  confirming?: string | null;
 }) {
-  const previous =
-    step === "course" ? "book" : step === "audio" ? "course" : "audio";
   return (
-    <PublicShell walkthrough>
+    <PublicShell checkout>
       <div className="flow-wrap wrap sales-walkthrough">
-        <Progress step={step} selection={selection} />
-        {step === "book" ? (
-          <BookCheckout />
-        ) : step === "course" ? (
-          <CourseOffer />
-        ) : step === "audio" ? (
-          <AudioOffer selection={selection} />
-        ) : (
-          <PreviewComplete selection={selection} />
-        )}
+        <Progress step={step} />
+        <MemberProvider>
+          {step === "book" ? (
+            <BookCheckout />
+          ) : step === "course" ? (
+            <CourseOffer />
+          ) : step === "audio" ? (
+            <AudioOffer />
+          ) : (
+            <ProductsSummary confirming={confirming} />
+          )}
+        </MemberProvider>
         {step !== "book" && (
           <div className="walkthrough-back">
-            <Link href={previewHref(previous, selection)}>
+            <Link
+              href={steps[steps.findIndex(([id]) => id === step) - 1][2]}
+            >
               ←{" "}
               {step === "course"
                 ? "Back to book checkout"

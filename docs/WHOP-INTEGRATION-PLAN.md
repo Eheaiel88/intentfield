@@ -86,18 +86,20 @@ As built (differences from the sketch are noted):
 
 Verified: 16 new tests including an end-to-end signed delivery through the HTTP route (bad signature 401, applied once, replay = duplicate), refund isolation, dispute lifecycle and access-term arithmetic. Whop-down resilience holds structurally: access reads only `grants` (`convex/access.ts` makes no external calls). Remaining to go live: create the webhook on the Whop business pointing at the Convex site URL, store its `ws_` secret via `npx convex env set WHOP_WEBHOOK_SECRET`, and send a test event.
 
-## Phase 4 — Real checkout on the website
+## Phase 4 — Real checkout on the website — BUILT 30 Sep 2026, awaiting live test purchase
 
 Goal: replace the simulation with Whop Checkout Element; buyer lands in the member area with purchases unlocked.
 
-1. `@whop/elements-react` Checkout Element per funnel page, one plan each (see Funnel decision). No legacy embedded checkout.
-2. Server-created checkout configurations carrying `metadata` that ties the session to the signed-in Clerk user (a server-issued signed nonce, not a bare user id). The webhook resolves the nonce → member record. Metadata is an attribution hint; the grant itself only ever comes from the verified webhook payload.
-3. Buyer flow: sign-in (or account-creation step) before/with checkout so there is always a member record to attach the purchase to. Guest checkout → post-payment claim flows are explicitly out of scope (they re-open the return-URL trust hole).
-4. Optimistic unlock: after `onComplete`/return, show the member area with the purchased item in a "confirming your purchase…" state driven by our own pending-purchase record; flip to unlocked when the webhook lands (normally seconds). No content is served from the pending state that the webhook could contradict — the pending state gates on the first webhook for new buyers, and in the common case it resolves before the member navigates anywhere.
-5. Remove all "sample walkthrough / no payment is taken" copy in the same change that enables real charges — never half-and-half.
-6. Keep `/sample` and the free sample download as the no-payment path.
+As built (one design change from the sketch):
 
-Acceptance ("done means" #1–2; the brief's #4 is superseded by the separate-accounts decision): real $19 purchase unlocks book only; add course → course unlocks; add audio → audio unlocks; signing back in to the same Clerk account shows the purchases and progress; a different account — including a Whop account on the same email — sees none of them.
+1. `@whop/elements-react@1.1.0` Checkout Element per funnel page, one plan each; the simulation component, its URL-selection helpers and all "no payment is taken" copy are removed in the same change. `/sample` remains the free path.
+2. **Client-passed metadata instead of server-created checkout configurations.** The element's `Checkout` handle officially accepts `metadata` ("read back on the payment"), so the signed-in member mints a single-use nonce via an authenticated Convex mutation (`convex/checkout.ts`) and the element carries `{checkout_nonce}` directly. This removed the REST dependency (and the wait on app authorization) without weakening the trust model: a nonce is random, product-bound, 24-hour-limited, single-use, and only ever grants to the principal that minted it — the webhook (`resolveNonce` in `convex/purchases.ts`) is still the only grantor. Server-created configurations remain a later hardening option; the permissions are already requested.
+3. Buyer flow: every checkout page requires Clerk sign-in (redirect to `/sign-up?redirect_url=…`), so a member record always exists. Guest checkout stays out of scope.
+4. One payment entitles both surface accounts: the webhook grants the Whop principal (source `pay_…`) and, via the nonce, the website principal (source `pay_…:site`); refunds and disputes move both grants together. Purchases store `sitePrincipal` once resolved.
+5. Optimistic UX: `onComplete`/`returnUrl` land on the next step with `?confirming=<sku>` (wording only); the products page shows "confirming your purchase" until the reactive `access.mine` query flips when the webhook lands. Nothing is served from the pending state.
+6. Member-area locked screens now link to the matching checkout step on the website; the embedded surface points to the Whop store instead (completed in Phase 5).
+
+Verified: nonce lifecycle tests (auth required, single-use, product-bound, cross-payment reuse and forged values rejected, refund revokes both surface grants); 44 tests green; typecheck/lint/build clean. Remaining to accept: the live "done means" purchases — real $19 → book only; +$79 → course; +$29 → audio; same Clerk account sees them; a Whop account on the same email sees none — which require the deployed site and a real card.
 
 ## Phase 5 — Whop storefront surface
 

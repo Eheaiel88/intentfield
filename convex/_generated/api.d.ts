@@ -9,6 +9,7 @@
  */
 
 import type * as access from "../access.js";
+import type * as checkout from "../checkout.js";
 import type * as content from "../content.js";
 import type * as grants from "../grants.js";
 import type * as http from "../http.js";
@@ -24,6 +25,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   access: typeof access;
+  checkout: typeof checkout;
   content: typeof content;
   grants: typeof grants;
   http: typeof http;

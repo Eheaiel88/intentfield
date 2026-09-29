@@ -165,11 +165,34 @@ export function FullWorkspace({
               : `${product === "book" ? "The book and workbook" : "Morning & Evening audio"} isn’t included in your account yet.`
           }
         />
-        <p>
-          Purchases are not open while we connect Whop. Your available products
-          are ready below.
-        </p>
-        <ButtonLink href={href("purchases")}>View my products</ButtonLink>
+        {embedded ? (
+          <p>
+            Add it from the IntentField store in Whop. Your available products
+            are ready below.
+          </p>
+        ) : (
+          <p>
+            Add it with a one-time purchase. Your available products are ready
+            below.
+          </p>
+        )}
+        {!embedded && (
+          <ButtonLink
+            href={product === "book" ? "/checkout" : `/checkout/${product}`}
+          >
+            {product === "course"
+              ? "Add Prosperity 30 · $79"
+              : product === "book"
+                ? "Get the book · $19"
+                : "Add the audio companion · $29"}
+          </ButtonLink>
+        )}
+        <ButtonLink
+          href={href("purchases")}
+          className={embedded ? "button primary" : "button quiet"}
+        >
+          View my products
+        </ButtonLink>
         {!embedded && (
           <ButtonLink className="text-link" href="/sample">
             Read the book sample

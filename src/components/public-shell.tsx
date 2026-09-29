@@ -3,23 +3,23 @@ import { Brand, ButtonLink } from "./brand";
 import { ThemeToggle } from "./theme-toggle";
 export function PublicShell({
   children,
-  walkthrough = false,
+  checkout = false,
 }: {
   children: React.ReactNode;
-  walkthrough?: boolean;
+  checkout?: boolean;
 }) {
   return (
     <>
-      {walkthrough && (
+      {checkout && (
         <div className="edition walkthrough-banner">
           <span className="signal" aria-hidden="true" />
-          SAMPLE SALES WALKTHROUGH
-          <span>No payment is taken. Your account access stays unchanged.</span>
+          SECURE CHECKOUT
+          <span>Payments processed by Whop. Prices in USD before tax.</span>
         </div>
       )}
       <header className="site-nav wrap">
         <Brand />
-        {walkthrough ? (
+        {checkout ? (
           <span className="nav-caption">BUILD WEALTH FROM WITHIN.</span>
         ) : (
           <nav aria-label="Website navigation">
@@ -29,7 +29,7 @@ export function PublicShell({
         )}
         <ThemeToggle />
         <div className="site-account">
-          {walkthrough ? (
+          {checkout ? (
             <Link href="/" className="member-sign-in">
               Back to the landing page
             </Link>
@@ -57,7 +57,7 @@ export function PublicShell({
         <p>The inner work of building wealth.</p>
         <span>INTENTFIELD / 2026</span>
       </footer>
-      {process.env.NODE_ENV === "development" && !walkthrough && (
+      {process.env.NODE_ENV === "development" && !checkout && (
         <ButtonLink
           href="/dev/review/today"
           className="button quiet small preview-badge"
