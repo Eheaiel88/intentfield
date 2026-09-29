@@ -71,18 +71,20 @@ Status: the separation is structural (Phase 1 principals), verified and document
 
 Acceptance: same email on both surfaces yields two independent workspaces; no code path reads or writes across the namespace boundary; a website purchase unlocks the buyer's Clerk account and their Whop membership shows the app inside Whop with a fresh, separate workspace.
 
-## Phase 3 — Purchases recorded in our database (webhooks)
+## Phase 3 — Purchases recorded in our database (webhooks) — BUILT 29 Sep 2026
 
 Goal: our Convex records are the source of truth for access.
 
-1. Webhook endpoint (Next.js route handler → Convex): subscribe to payment success, refund, dispute and membership lifecycle events for the company in the Whop dashboard.
-2. Verify signatures on the raw body (Standard Webhooks); reject unsigned/expired/wrong-company deliveries. Confirm the currently shipped helper in the pinned SDK — the docs have flagged helper churn here before; implement the documented signature procedure if the helper is missing.
-3. Idempotency: persist the delivery id with a unique constraint before processing; a duplicate delivery changes nothing twice. Out-of-order arrival is handled by re-reading current state, not by trusting event order.
-4. `purchases` table: provider payment id, whopUserId, plan id, product id, amount, currency, status (`settled`/`refunded`/`disputed`), timestamps. Maps `planId → entitlement key` from one config (extend `whop-catalog.ts`).
-5. Entitlement grants/revocations are derived from `purchases`. Refund of audio never touches book/course. Existing complimentary grants (owner review) remain a distinct, clearly-labeled grant type.
-6. Reconciliation: a manual "recheck my access" support action + a scheduled comparison of Whop memberships vs our records, flagging drift. A missed webhook must not permanently strand a buyer.
+As built (differences from the sketch are noted):
 
-Acceptance: replayed webhook = no double grant; refund revokes exactly one entitlement; with Whop API calls blocked (env flag in a test), existing members retain full access.
+1. The receiver is a **Convex HTTP action** at `<deployment>.convex.site/whop/webhook` (`convex/http.ts`), not a Next.js route: the raw body, the secret and the transaction all live in one place, and Vercel is not in the delivery path. `WHOP_WEBHOOK_SECRET` is Convex-deployment env.
+2. Signature verification per Whop's documented Standard Webhooks contract in `src/lib/standard-webhooks.ts` (HMAC-SHA256 over `id.timestamp.body`, `ws_` secret used as-is, constant-time compare, 5-minute window, multi-signature headers for rotation). The docs still say the TS SDK helper "lands in the next release", so the manual procedure is the implementation, unit-tested against its own signer.
+3. Idempotency and durability in one transaction (`convex/purchases.ts` `applyEvent`): the delivery id, the purchase row and the derived grant commit together; a redelivery returns `duplicate` and changes nothing. Out-of-order safety: a late `payment.succeeded` never reopens a refunded/disputed purchase; disputes suspend access and only a `won` outcome restores it; only `succeeded` refunds revoke.
+4. `purchases` table as planned (plus `checkoutNonce` captured from payment metadata for Phase 4); `skuForPlan()` and `PURCHASE_ACCESS_DAYS = 365` in `whop-catalog.ts`. Grants carry `validUntil = paidAt + 365d`, matching the published 12-month term.
+5. Grant per payment (`source = paymentId`) for the Whop-surface principal; refunding audio cannot touch book/course by construction. Unknown plans/users and unhandled events are recorded as `ignored:…` deliveries (returning 200 so Whop doesn't retry for 71 hours) for reconciliation review. Complimentary owner grants remain distinct sources.
+6. Reconciliation is **partially deferred**: the recorded `ignored:` rows are the review queue, but the "recheck my access" member action and the scheduled Whop-vs-records comparison need a server API key on Convex and verified REST endpoints — tracked as Phase 3b, before launch.
+
+Verified: 16 new tests including an end-to-end signed delivery through the HTTP route (bad signature 401, applied once, replay = duplicate), refund isolation, dispute lifecycle and access-term arithmetic. Whop-down resilience holds structurally: access reads only `grants` (`convex/access.ts` makes no external calls). Remaining to go live: create the webhook on the Whop business pointing at the Convex site URL, store its `ws_` secret via `npx convex env set WHOP_WEBHOOK_SECRET`, and send a test event.
 
 ## Phase 4 — Real checkout on the website
 

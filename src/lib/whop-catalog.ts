@@ -22,3 +22,17 @@ export const whopCatalog = {
     },
   },
 } as const;
+
+// Published access term for one-time digital purchases: 12 months online.
+export const PURCHASE_ACCESS_DAYS = 365;
+
+// A verified payment's plan decides which product it unlocks. Unknown plans
+// are recorded and ignored, never guessed.
+export function skuForPlan(
+  planId: string,
+): keyof typeof whopCatalog.products | null {
+  for (const [sku, product] of Object.entries(whopCatalog.products))
+    if (product.planId === planId)
+      return sku as keyof typeof whopCatalog.products;
+  return null;
+}

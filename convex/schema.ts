@@ -76,4 +76,35 @@ export default defineSchema({
     revision: v.number(),
     updatedAt: v.number(),
   }).index("by_principal_day", ["principal", "day"]),
+  // One row per verified Whop payment: the source of truth for access.
+  // Grants derive from these rows, so members keep access when Whop is
+  // unreachable. Status only moves forward out of settled; a late
+  // payment.succeeded never resurrects a refunded or disputed purchase.
+  purchases: defineTable({
+    paymentId: v.string(),
+    whopUserId: v.string(),
+    planId: v.string(),
+    productId: v.optional(v.string()),
+    sku,
+    status: v.union(
+      v.literal("settled"),
+      v.literal("refunded"),
+      v.literal("disputed"),
+    ),
+    amount: v.number(),
+    currency: v.string(),
+    paidAt: v.number(),
+    checkoutNonce: v.optional(v.string()),
+    updatedAt: v.number(),
+  })
+    .index("by_payment", ["paymentId"])
+    .index("by_whop_user", ["whopUserId"]),
+  // Every webhook delivery id is recorded before its effects are applied,
+  // in the same transaction; a redelivered event changes nothing twice.
+  webhookDeliveries: defineTable({
+    deliveryId: v.string(),
+    eventType: v.string(),
+    result: v.string(),
+    receivedAt: v.number(),
+  }).index("by_delivery", ["deliveryId"]),
 });

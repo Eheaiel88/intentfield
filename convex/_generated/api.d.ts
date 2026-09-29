@@ -11,7 +11,9 @@
 import type * as access from "../access.js";
 import type * as content from "../content.js";
 import type * as grants from "../grants.js";
+import type * as http from "../http.js";
 import type * as lessons from "../lessons.js";
+import type * as purchases from "../purchases.js";
 import type * as workspace from "../workspace.js";
 
 import type {
@@ -24,7 +26,9 @@ declare const fullApi: ApiFromModules<{
   access: typeof access;
   content: typeof content;
   grants: typeof grants;
+  http: typeof http;
   lessons: typeof lessons;
+  purchases: typeof purchases;
   workspace: typeof workspace;
 }>;
 
