@@ -1,5 +1,6 @@
 import { PublicShell } from "@/components/public-shell";
 import { BookObject, ButtonLink } from "@/components/brand";
+import { SampleDownloadLink } from "@/components/whop-pixel";
 import book from "@/lib/book-sample.json";
 export default function Sample() {
   return (
@@ -15,13 +16,9 @@ export default function Sample() {
             </h1>
             <p>A story. A teaching. A direction you can make your own.</p>
           </div>
-          <a
-            className="button quiet"
-            href="/downloads/intentfield-book-workbook-sample.pdf"
-            download
-          >
+          <SampleDownloadLink className="button quiet">
             Download sample PDF ↓
-          </a>
+          </SampleDownloadLink>
         </div>
         <div className="reader-layout">
           <aside className="reader-side">

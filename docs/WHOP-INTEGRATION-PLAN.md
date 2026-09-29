@@ -101,20 +101,19 @@ As built (one design change from the sketch):
 
 Verified: nonce lifecycle tests (auth required, single-use, product-bound, cross-payment reuse and forged values rejected, refund revokes both surface grants); 44 tests green; typecheck/lint/build clean. Remaining to accept: the live "done means" purchases — real $19 → book only; +$79 → course; +$29 → audio; same Clerk account sees them; a Whop account on the same email sees none — which require the deployed site and a real card.
 
-## Phase 5 — Whop storefront surface — CONFIGURED 30 Sep 2026, blocked on one dashboard click
+## Phase 5 — Whop storefront surface — DONE 30 Sep 2026 (visibility flip and live test held for launch)
 
-1. **Blocked on app authorization:** creating the app's experience still fails with `app_authorization:create` — the owner must add the IntentField app to the whop from the dashboard once (this also activates the app API key's four requested permissions). After that, create the experience and attach it to all three products via `experiences_create`/`experiences_attach`.
+1. **App authorization completed via the documented install-link flow** — `https://whop.com/apps/app_hA6Q15wmNvxibS/install` → pick the business → approve the permission prompt (the dashboard "add app" browser only lists App Store apps, so an unlisted app must use its install link; per the permissions guide, the same flow re-runs whenever new permissions are added). The approval activated the app API key's four scopes (verified) and itself created and attached the app experience `exp_hJfgmqQDa2Fek0` across the products; a duplicate experience created manually during verification was deleted. Each product now carries exactly one IntentField experience, and the embedded surface accepts any experience id (routing only).
 2. Product pages done: truthful descriptions with delivery statement ("delivered in the IntentField app right inside Whop") and the 12-month access term on all three; the audio product and plan copy corrected to say written practices now, recordings added to the same product when finished (none are produced yet). Covers were already uploaded; the new Field + Horizon mark is the app icon and business logo.
 3. Plans aligned with the published term: `expiration_days = 365` set on all three (previously indefinite, which also conflicted with Whop Seller Terms); checkout styling set to graphite `#101312` / electric `#D5FF52`. A Whop membership now expires in step with our own grant's `validUntil`; the `membership.deactivated` event at expiry is deliberately unhandled (our grants expire independently).
 4. Products remain **hidden** by owner decision until the full live acceptance run; the visibility flip is the last step.
 5. Live test purchase through the Whop product page → IntentField in the sidebar (done-means #3) runs with the rest of the deferred live tests.
 
-## Phase 6 — Whop pixel
+## Phase 6 — Whop pixel — BUILT 30 Sep 2026
 
-1. Manual snippet in the website `<head>` (all funnel pages): `whop.setScope("biz_xeSK2pOhE9Sxuk"); whop.track("page")`.
-2. Send `lead` (with `event_id` for dedupe) on free sample signup. **No purchase events** — Whop records its own checkouts server-side; sending our own would double count.
-3. Do not attach member practice data, entitlement state or anything from the private app to pixel events. Pixel loads on the public website only, not inside `/app/*` or `/experiences/*`.
-4. Verify with Whop's pixel checker (done-means #6).
+1. Official loader (verbatim from the pixel guide) in `src/components/whop-pixel.tsx`, mounted through `PublicShell` so it renders exactly on the public funnel (landing, sample, checkout, not-found) and never in `/app/*` or `/experiences/*`. Scope `biz_xeSK2pOhE9Sxuk`; `page` tracked on mount and on client-side route changes; production builds only; wrapped so analytics can never break the page.
+2. `lead` fires when a visitor downloads the free sample, with a per-browser-session `event_id` for dedupe and no personal data attached. **No purchase events** — Whop records its own checkouts server-side.
+3. Remaining: run Whop's pixel checker against the deployed site (done-means #6), and re-verify after the myintentfield.com cutover.
 
 ## Phase 7 — Domain cutover and launch checklist
 

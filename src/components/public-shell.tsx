@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Brand, ButtonLink } from "./brand";
 import { ThemeToggle } from "./theme-toggle";
+import { WhopPixel } from "./whop-pixel";
 export function PublicShell({
   children,
   checkout = false,
@@ -10,6 +11,7 @@ export function PublicShell({
 }) {
   return (
     <>
+      <WhopPixel />
       {checkout && (
         <div className="edition walkthrough-banner">
           <span className="signal" aria-hidden="true" />
