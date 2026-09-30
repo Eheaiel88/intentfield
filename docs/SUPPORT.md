@@ -38,6 +38,27 @@ other.
 > private notes between them. You can export your notes from Settings on
 > either surface and keep both.
 
+## Customer and purchase export (owner runbook)
+
+The customer list and purchase records are always exportable from our own
+database, independent of Whop. From `production/` (targets follow
+`CONVEX_DEPLOYMENT`; add `--prod` for the production deployment):
+
+- `npx convex data --prod purchases` — every verified purchase (payment id,
+  Whop user, product, status, amounts).
+- `npx convex data --prod grants` — current entitlements per principal.
+- `npx convex export --prod --include-file-storage --path backup.zip` — a
+  complete snapshot (all tables plus uploaded media) for backup or
+  migration. Whop's own dashboard export remains the secondary source for
+  payment/payout detail.
+
+## Refund handling
+
+The published policy is 7 days on all one-time digital products. Issue the
+refund on the Whop order (dashboard or order support); the refund webhook
+then revokes exactly that product's access on both surfaces automatically.
+No manual grant editing is needed or allowed.
+
 ## What support can and cannot do
 
 - Can: re-check a member's access ("recheck access" action, once Phase 3

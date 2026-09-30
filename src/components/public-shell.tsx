@@ -57,6 +57,12 @@ export function PublicShell({
       <footer className="site-footer wrap">
         <Brand />
         <p>The inner work of building wealth.</p>
+        <nav aria-label="Policies" className="footer-policies">
+          <Link href="/terms">Terms</Link>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/refunds">Refunds</Link>
+          <a href="mailto:support@myintentfield.com">Support</a>
+        </nav>
         <span>INTENTFIELD / 2026</span>
       </footer>
       {process.env.NODE_ENV === "development" && !checkout && (

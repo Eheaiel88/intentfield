@@ -3609,3 +3609,37 @@ audio { width:100%; margin:24px 0; }
 .book-contents .lesson-row h3 { overflow-wrap: anywhere; }
 .audio-player { margin: 2rem 0; }
 .audio-player .field { max-width: 28rem; }
+
+/* Policy pages and footer policy links */
+.footer-policies {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+}
+.footer-policies a {
+  color: var(--muted);
+  font-size: var(--text-caption);
+  text-decoration: none;
+}
+.footer-policies a:hover,
+.footer-policies a:focus-visible {
+  color: var(--paper);
+  text-decoration: underline;
+}
+.policy-page {
+  padding-top: 48px;
+}
+.policy-page .reader {
+  max-width: 720px;
+  margin: 0 auto;
+}
+@media (max-width: 720px) {
+  .site-footer {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-policies {
+    margin-left: 0;
+    width: 100%;
+  }
+}

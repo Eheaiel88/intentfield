@@ -115,14 +115,24 @@ Verified: nonce lifecycle tests (auth required, single-use, product-bound, cross
 2. `lead` fires when a visitor downloads the free sample, with a per-browser-session `event_id` for dedupe and no personal data attached. **No purchase events** — Whop records its own checkouts server-side.
 3. Remaining: run Whop's pixel checker against the deployed site (done-means #6), and re-verify after the myintentfield.com cutover.
 
-## Phase 7 — Domain cutover and launch checklist
+## Phase 7 — Domain cutover and launch checklist — IN PROGRESS 30 Sep 2026
 
-1. `myintentfield.com` live on Vercel; update Whop app `base_url` to it; re-test the embedded experience through the Whop proxy after the change.
-2. Clerk production instance + Convex production deployment wired to the production domain; dev instances stay on preview.
-3. Privacy policy + terms: name Whop as payment processor, disclose the Whop pixel; refund policy consistent across website, Whop product pages and actual support behavior.
-4. Copy scrub: no income claims or promised financial results anywhere (Meta rejects them; also matches the V2.1 claims register).
-5. Customer export verified: a repeatable export of members + purchases from Convex (and Whop's own export as secondary).
-6. Full "done means" test matrix executed with real purchases and recorded evidence, including the Whop-blocked resilience test.
+Done:
+
+1. **Convex production** deployment `confident-wombat-458` created and deployed; env vars set (`CLERK_JWT_ISSUER_DOMAIN=https://clerk.myintentfield.com`, `WHOP_CONVEX_JWKS`); the full dev content library and media imported by snapshot, then all dev-namespace member data purged with `maintenance:clearMemberDataAfterImport` (dev principals can never authenticate in production). `maintenance:addOwner` exists for the one-time owner grant after the owner's first production sign-in.
+2. **Domains** `myintentfield.com` and `www` (308 → apex) attached to the Vercel project; GoDaddy records are on the owner checklist below.
+3. **Policy pages** live in code: `/terms`, `/privacy` (names Whop as payment processor and discloses the pixel; documents the two-account design), `/refunds` (7-day policy per owner decision, superseding the earlier 30-day proposal). Linked from the public footer and the checkout order summary. Support contact: support@myintentfield.com.
+4. **Copy scrub** for income claims: clean. **Customer export runbook** documented in SUPPORT.md (Convex data/exports; Whop dashboard secondary).
+
+Owner checklist (everything that genuinely needs the owner, batched):
+
+- [ ] GoDaddy DNS: `A @ → 76.76.21.21`, `CNAME www → cname.vercel-dns.com`; delete the old A records on `@`. Clerk's CNAMEs get added in the same visit once the production instance reports them.
+- [ ] `clerk auth login` in a terminal (the CLI token expired), then the production instance can be created and configured; Google OAuth needs a Google Cloud OAuth client (redirect URI comes from Clerk after instance creation) per the owner's email+Google decision.
+- [ ] support@myintentfield.com forwarding (GoDaddy email forwarding is free) so the published support contact works before launch.
+- [ ] A second Whop webhook pointing at `https://confident-wombat-458.convex.site/whop/webhook` with the same five events (dashboard; the app key lacks webhook scope); paste the new secret for `npx convex env set --prod WHOP_WEBHOOK_SECRET`.
+- [ ] Whop payout identity verification + 2FA (required before payouts).
+
+Remaining engineering at cutover (after the checklist): flip Vercel production env to production Convex + production Clerk keys, update the Whop app `base_url` to `https://myintentfield.com`, re-test the embedded surface, run the pixel checker, owner grant via `maintenance:addOwner`, owner uploads final PDFs/audio via Content Studio, then the full "done means" live purchase matrix and the product visibility flip.
 
 ## Sequencing and rough effort
 

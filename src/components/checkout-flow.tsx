@@ -94,7 +94,8 @@ function BookCheckout() {
           <strong>$19</strong>
         </div>
         <p className="micro">
-          USD, before applicable tax. Payments are processed by Whop.
+          USD, before applicable tax. Payments are processed by Whop.{" "}
+          <Link href="/refunds">7-day refund policy</Link>.
         </p>
         <p className="micro">
           Next: choose whether to add the $79 course and the $29 audio
