@@ -1,7 +1,11 @@
 import "server-only";
 import { importJWK, jwtVerify, SignJWT, type JWTPayload } from "jose";
 import { whopCatalog } from "./whop-catalog";
-import { WHOP_SURFACE_AUDIENCE, WHOP_SURFACE_ISSUER } from "./whop-surface";
+import {
+  WHOP_SURFACE_AUDIENCE,
+  WHOP_SURFACE_ISSUER,
+  WHOP_SURFACE_KEY_ID,
+} from "./whop-surface";
 
 // Whop's experience proxy signs x-whop-user-token as an ES256 JWT. The
 // issuer, audience rule and public JWK below mirror Whop's own published
@@ -73,7 +77,7 @@ export async function mintWhopConvexToken(
   const expiresAt =
     Math.floor(Date.now() / 1000) + CONVEX_TOKEN_LIFETIME_SECONDS;
   const token = await new SignJWT({})
-    .setProtectedHeader({ alg: "ES256" })
+    .setProtectedHeader({ alg: "ES256", kid: WHOP_SURFACE_KEY_ID })
     .setIssuer(WHOP_SURFACE_ISSUER)
     .setAudience(WHOP_SURFACE_AUDIENCE)
     .setSubject(session.userId)
